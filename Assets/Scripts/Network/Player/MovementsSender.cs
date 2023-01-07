@@ -6,7 +6,7 @@ using UnityEngine;
 public class MovementsSender : MonoBehaviour
 {
     private NetworkManager _networkManager;
-
+    
     private Vector3 _lastPos;
     private Quaternion _lastRot;
     

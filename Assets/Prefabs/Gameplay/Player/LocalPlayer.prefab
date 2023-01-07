@@ -1151,7 +1151,7 @@ MonoBehaviour:
   walkSpeed: 5
   runSpeed: 10
   airControlRate: 2
-  jumpSpeed: 10
+  jumpSpeed: 5
   jumpDuration: 0.2
   airFriction: 0.5
   groundFriction: 100
@@ -1234,6 +1234,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75cd4fabf70d1af4ab3b3767887b3e7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _animations: {fileID: 328777854194070208}
 --- !u!114 &8635589088496593999
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1882,6 +1883,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _smooth: 10
   _controller: {fileID: 4523993326320803610}
+  Velocity: {x: 0, y: 0}
+  Jump: 0
 --- !u!1 &5911621579561075525
 GameObject:
   m_ObjectHideFlags: 0

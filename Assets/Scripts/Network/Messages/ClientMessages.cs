@@ -9,6 +9,7 @@ public class ClientMessages : MonoBehaviour
         StartGame,
         Ready,
         Movements,
+        Anims,
     }
     
     #region Send
@@ -36,6 +37,14 @@ public class ClientMessages : MonoBehaviour
         Message message = Message.Create(MessageSendMode.unreliable, MessagesId.Movements);
         message.AddVector3(pos);
         message.AddQuaternion(rot);
+        NetworkManager.Instance.Client.Send(message);
+    }
+
+    public void SendAnims(Vector2 velocity, bool jump)
+    {
+        Message message = Message.Create(MessageSendMode.unreliable, MessagesId.Anims);
+        message.AddVector2(velocity);
+        message.AddBool(jump);
         NetworkManager.Instance.Client.Send(message);
     }
     #endregion
@@ -79,14 +88,25 @@ public class ClientMessages : MonoBehaviour
     [MessageHandler((ushort) ServerMessages.MessagesId.Movements)]
     private static void OnServerMovements(Message message)
     {
-        Debug.Log("swag");
+        ushort id = message.GetUShort();
+
+        if (!NetworkManager.Instance.Players.ContainsKey(id)) return;
+
+        if (NetworkManager.Instance.Players[id] is PlayerLobbyIdentity) return;
         
+        ((PlayerGameIdentity) NetworkManager.Instance.Players[id]).MovementReceiver.SetState(message.GetVector3(), message.GetQuaternion());
+    }
+
+    [MessageHandler((ushort) ServerMessages.MessagesId.Anims)]
+    private static void OnServerAnims(Message message)
+    {
         ushort id = message.GetUShort();
 
         if (!NetworkManager.Instance.Players.ContainsKey(id)) return;
         
-        ((PlayerGameIdentity) NetworkManager.Instance.Players[id]).MovementReceiver.SetState(message.GetVector3(),
-            message.GetQuaternion());
+        if (NetworkManager.Instance.Players[id] is PlayerLobbyIdentity) return;
+        
+        ((PlayerGameIdentity) NetworkManager.Instance.Players[id]).Animations.SetAnim(message.GetVector2(), message.GetBool());
     }
     #endregion
 }
