@@ -22,7 +22,9 @@ namespace CMF
 		bool jumpKeyIsPressed = false;
 
 		//Movement speed;
-		public float movementSpeed = 7f;
+		public float walkSpeed = 7f;
+		public float runSpeed = 10f;
+		private float movementSpeed = 7f;
 
 		//How fast the controller can change direction while in the air;
 		//Higher values result in more air control;
@@ -70,7 +72,7 @@ namespace CMF
 			Jumping
 		}
 		
-		ControllerState currentControllerState = ControllerState.Falling;
+		public ControllerState CurrentControllerState = ControllerState.Falling;
 
 		[Tooltip("Optional camera transform used for calculating movement direction. If assigned, character movement will take camera view into account.")]
 		public Transform cameraTransform;
@@ -91,10 +93,21 @@ namespace CMF
 		//This function is called right after Awake(); It can be overridden by inheriting scripts;
 		protected virtual void Setup()
 		{
+			movementSpeed = walkSpeed;
 		}
 
 		void Update()
 		{
+			if (Input.GetKeyDown(KeyCode.LeftShift))
+			{
+				movementSpeed = runSpeed;
+			}
+
+			if (Input.GetKeyUp(KeyCode.LeftShift))
+			{
+				movementSpeed = walkSpeed;
+			}
+			
 			HandleJumpKeyInput();
 		}
 
@@ -128,7 +141,7 @@ namespace CMF
 			mover.CheckForGround();
 
 			//Determine controller state;
-			currentControllerState = DetermineControllerState();
+			CurrentControllerState = DetermineControllerState();
 
 			//Apply friction and gravity to 'momentum';
 			HandleMomentum();
@@ -138,7 +151,7 @@ namespace CMF
 
 			//Calculate movement velocity;
 			Vector3 _velocity = Vector3.zero;
-			if(currentControllerState == ControllerState.Grounded)
+			if(CurrentControllerState == ControllerState.Grounded)
 				_velocity = CalculateMovementVelocity();
 			
 			//If local momentum is used, transform momentum into world space first;
@@ -234,7 +247,7 @@ namespace CMF
 			bool _isSliding = mover.IsGrounded() && IsGroundTooSteep();
 			
 			//Grounded;
-			if(currentControllerState == ControllerState.Grounded)
+			if(CurrentControllerState == ControllerState.Grounded)
 			{
 				if(_isRising){
 					OnGroundContactLost();
@@ -252,7 +265,7 @@ namespace CMF
 			}
 
 			//Falling;
-			if(currentControllerState == ControllerState.Falling)
+			if(CurrentControllerState == ControllerState.Falling)
 			{
 				if(_isRising){
 					return ControllerState.Rising;
@@ -268,7 +281,7 @@ namespace CMF
 			}
 			
 			//Sliding;
-			if(currentControllerState == ControllerState.Sliding)
+			if(CurrentControllerState == ControllerState.Sliding)
 			{	
 				if(_isRising){
 					OnGroundContactLost();
@@ -286,7 +299,7 @@ namespace CMF
 			}
 
 			//Rising;
-			if(currentControllerState == ControllerState.Rising)
+			if(CurrentControllerState == ControllerState.Rising)
 			{
 				if(!_isRising){
 					if(mover.IsGrounded() && !_isSliding){
@@ -314,7 +327,7 @@ namespace CMF
 			}
 
 			//Jumping;
-			if(currentControllerState == ControllerState.Jumping)
+			if(CurrentControllerState == ControllerState.Jumping)
 			{
 				//Check for jump timeout;
 				if((Time.time - currentJumpStartTime) > jumpDuration)
@@ -342,7 +355,7 @@ namespace CMF
         //Check if player has initiated a jump;
         void HandleJumping()
         {
-            if (currentControllerState == ControllerState.Grounded)
+            if (CurrentControllerState == ControllerState.Grounded)
             {
                 if ((jumpKeyIsPressed == true || jumpKeyWasPressed) && !jumpInputIsLocked)
                 {
@@ -350,7 +363,7 @@ namespace CMF
                     OnGroundContactLost();
                     OnJumpStart();
 
-                    currentControllerState = ControllerState.Jumping;
+                    CurrentControllerState = ControllerState.Jumping;
                 }
             }
         }
@@ -378,7 +391,7 @@ namespace CMF
 			_verticalMomentum -= tr.up * gravity * Time.deltaTime;
 
 			//Remove any downward force if the controller is grounded;
-			if(currentControllerState == ControllerState.Grounded && VectorMath.GetDotProduct(_verticalMomentum, tr.up) < 0f)
+			if(CurrentControllerState == ControllerState.Grounded && VectorMath.GetDotProduct(_verticalMomentum, tr.up) < 0f)
 				_verticalMomentum = Vector3.zero;
 
 			//Manipulate momentum to steer controller in the air (if controller is not grounded or sliding);
@@ -407,7 +420,7 @@ namespace CMF
 			}
 
 			//Steer controller on slopes;
-			if(currentControllerState == ControllerState.Sliding)
+			if(CurrentControllerState == ControllerState.Sliding)
 			{
 				//Calculate vector pointing away from slope;
 				Vector3 _pointDownVector = Vector3.ProjectOnPlane(mover.GetGroundNormal(), tr.up).normalized;
@@ -422,7 +435,7 @@ namespace CMF
 			}
 
 			//Apply friction to horizontal momentum based on whether the controller is grounded;
-			if(currentControllerState == ControllerState.Grounded)
+			if(CurrentControllerState == ControllerState.Grounded)
 				_horizontalMomentum = VectorMath.IncrementVectorTowardTargetVector(_horizontalMomentum, groundFriction, Time.deltaTime, Vector3.zero);
 			else
 				_horizontalMomentum = VectorMath.IncrementVectorTowardTargetVector(_horizontalMomentum, airFriction, Time.deltaTime, Vector3.zero); 
@@ -431,7 +444,7 @@ namespace CMF
 			momentum = _horizontalMomentum + _verticalMomentum;
 
 			//Additional momentum calculations for sliding;
-			if(currentControllerState == ControllerState.Sliding)
+			if(CurrentControllerState == ControllerState.Sliding)
 			{
 				//Project the current momentum onto the current ground normal if the controller is sliding down a slope;
 				momentum = Vector3.ProjectOnPlane(momentum, mover.GetGroundNormal());
@@ -446,7 +459,7 @@ namespace CMF
 			}
 			
 			//If controller is jumping, override vertical velocity with jumpSpeed;
-			if(currentControllerState == ControllerState.Jumping)
+			if(CurrentControllerState == ControllerState.Jumping)
 			{
 				momentum = VectorMath.RemoveDotVector(momentum, tr.up);
 				momentum += tr.up * jumpSpeed;
@@ -597,13 +610,13 @@ namespace CMF
 		//Returns 'true' if controller is grounded (or sliding down a slope);
 		public override bool IsGrounded()
 		{
-			return(currentControllerState == ControllerState.Grounded || currentControllerState == ControllerState.Sliding);
+			return(CurrentControllerState == ControllerState.Grounded || CurrentControllerState == ControllerState.Sliding);
 		}
 
 		//Returns 'true' if controller is sliding;
 		public bool IsSliding()
 		{
-			return(currentControllerState == ControllerState.Sliding);
+			return(CurrentControllerState == ControllerState.Sliding);
 		}
 
 		//Add momentum to controller;
