@@ -10,6 +10,7 @@ public class ClientMessages : MonoBehaviour
         Ready,
         Movements,
         Anims,
+        Shoot,
     }
     
     #region Send
@@ -45,6 +46,15 @@ public class ClientMessages : MonoBehaviour
         Message message = Message.Create(MessageSendMode.unreliable, MessagesId.Anims);
         message.AddVector2(velocity);
         message.AddBool(jump);
+        NetworkManager.Instance.Client.Send(message);
+    }
+
+    public void SendShoot(Vector3 pos, bool hit, Vector3 normal)
+    {
+        Message message = Message.Create(MessageSendMode.reliable, MessagesId.Shoot);
+        message.AddVector3(pos);
+        message.AddBool(hit);
+        message.AddVector3(normal);
         NetworkManager.Instance.Client.Send(message);
     }
     #endregion
@@ -107,6 +117,22 @@ public class ClientMessages : MonoBehaviour
         if (NetworkManager.Instance.Players[id] is PlayerLobbyIdentity) return;
         
         ((PlayerGameIdentity) NetworkManager.Instance.Players[id]).Animations.SetAnim(message.GetVector2(), message.GetBool());
+    }
+
+    [MessageHandler((ushort) ServerMessages.MessagesId.Shoot)]
+    private static void OnServerShoot(Message message)
+    {
+        ushort id = message.GetUShort();
+
+        Vector3 pos = message.GetVector3();
+        bool hit = message.GetBool();
+        Vector3 normal = message.GetVector3();
+        
+        if (!NetworkManager.Instance.Players.ContainsKey(id)) return;
+        
+        if (NetworkManager.Instance.Players[id] is PlayerLobbyIdentity) return;
+
+        ((PlayerGameIdentity) NetworkManager.Instance.Players[id]).Aim.Shoot(pos, hit ? normal : null);
     }
     #endregion
 }

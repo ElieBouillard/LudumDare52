@@ -11,6 +11,7 @@ public class ServerMessages : MonoBehaviour
         InitializeGameplay,
         Movements,
         Anims,
+        Shoot,
     }
 
     #region Send
@@ -66,6 +67,16 @@ public class ServerMessages : MonoBehaviour
         message.AddBool(jump);
         NetworkManager.Instance.Server.SendToAll(message,id);
     }
+
+    private static void SendShoot(ushort id, Vector3 pos, bool hit, Vector3 normal)
+    {
+        Message message =Message.Create(MessageSendMode.reliable, MessagesId.Shoot);
+        message.AddUShort(id);
+        message.AddVector3(pos);
+        message.AddBool(hit);
+        message.AddVector3(normal);
+        NetworkManager.Instance.Server.SendToAll(message, id);
+    }
     #endregion
 
     #region Received
@@ -98,6 +109,12 @@ public class ServerMessages : MonoBehaviour
     private static void OnClientAnims(ushort id, Message message)
     {
         SendAnims(id, message.GetVector2(), message.GetBool()); 
+    }
+
+    [MessageHandler((ushort) ClientMessages.MessagesId.Shoot)]
+    private static void OnClientShoot(ushort id, Message message)
+    {
+        SendShoot(id, message.GetVector3(), message.GetBool(), message.GetVector3());
     }
     #endregion
 }
