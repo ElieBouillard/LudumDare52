@@ -62,6 +62,8 @@ namespace CMF
 		[Tooltip("Whether to calculate and apply momentum relative to the controller's transform.")]
 		public bool useLocalMomentum = false;
 
+		public bool IsSprinting;
+		
 		//Enum describing basic controller states; 
 		public enum ControllerState
 		{
@@ -101,11 +103,13 @@ namespace CMF
 			if (Input.GetKeyDown(KeyCode.LeftShift))
 			{
 				movementSpeed = runSpeed;
+				IsSprinting = true;
 			}
 
 			if (Input.GetKeyUp(KeyCode.LeftShift))
 			{
 				movementSpeed = walkSpeed;
+				IsSprinting = false;
 			}
 			
 			HandleJumpKeyInput();
