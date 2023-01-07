@@ -6,51 +6,40 @@ using RiptideNetworking.Utils;
 using Steamworks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 using SteamClient = RiptideNetworking.Transports.SteamTransport.SteamClient;
 
 public class NetworkManager : Singleton<NetworkManager>
 {
     #region UnityInspector
     [Header("NetworkSettings")] [Space(10)]
-    [SerializeField] private bool _useSteam;
+    public bool UseSteam;
+    public ushort MaxPlayer = 4;
     [SerializeField] private ushort _port = 7777;
-    [SerializeField] private ushort _maxPlayer = 4;
     #endregion
     
     #region Fields
-    private Server _server;
-    private Client _client; 
-    /*Set To Private */ public GameState _gameState = GameState.OffLine;
-    private Dictionary<ushort, PlayerIdentity> _players = new Dictionary<ushort, PlayerIdentity>();
-    private PlayerIdentity  _localPlayer;
-    private ClientMessages _clientMessages;
-    private ServerMessages _serverMessages;
-    #endregion
-
-    #region Getters
-    public bool GetUseSteam => _useSteam;
-    public Server GetServer => _server;
-    public Client GetClient => _client;
-    public GameState GetGameState => _gameState;
-    public Dictionary<ushort, PlayerIdentity> GetPlayers => _players;
-    public PlayerIdentity GetLocalPlayer => _localPlayer;
-    public ClientMessages GetClientMessages => _clientMessages;
-    public ServerMessages GetServerMessages => _serverMessages;
-    public ushort GetMaxPlayer => _maxPlayer;
+    public Server Server { private set; get; }
+    public Client Client { private set; get; }
+    public GameState GameState = GameState.OffLine;
+    public Dictionary<ushort, PlayerIdentity> Players = new Dictionary<ushort, PlayerIdentity>();
+    public PlayerIdentity  LocalPlayer { private set; get; }
+    public ClientMessages ClientMessages { private set; get; }
+    public ServerMessages ServerMessages { private set; get; }
     #endregion
 
     #region Setters
-    public void SetLocalPlayer(PlayerIdentity player) => _localPlayer = player;
+    public void SetLocalPlayer(PlayerIdentity player) => LocalPlayer = player;
     #endregion
     
     protected override void Awake()
     {
         base.Awake();
 
-        _clientMessages = gameObject.AddComponent<ClientMessages>();
-        _serverMessages = gameObject.AddComponent<ServerMessages>();
+        ClientMessages = gameObject.AddComponent<ClientMessages>();
+        ServerMessages = gameObject.AddComponent<ServerMessages>();
 
-        if (_useSteam)
+        if (UseSteam)
         {
             gameObject.AddComponent<SteamManager>();
             gameObject.AddComponent<SteamLobbyManager>();
@@ -68,14 +57,14 @@ public class NetworkManager : Singleton<NetworkManager>
 
     private void FixedUpdate()
     {
-        _client.Tick();
+        Client.Tick();
         
-        if(_server.IsRunning) _server.Tick();
+        if(Server.IsRunning) Server.Tick();
     }
 
     private void OnApplicationQuit()
     {
-        switch (_gameState)
+        switch (GameState)
         {
             case GameState.OffLine:
                 break;
@@ -90,36 +79,36 @@ public class NetworkManager : Singleton<NetworkManager>
 
     private void InitializeClient(SteamServer steamServer)
     {
-        _client = _useSteam ? new Client(new SteamClient(steamServer)) : new Client();
+        Client = UseSteam ? new Client(new SteamClient(steamServer)) : new Client();
 
-        _client.Connected += ClientOnConnected;
-        _client.Disconnected += ClientOnDisconnected;
-        _client.ConnectionFailed += ClientOnConnectionFailed;
-        _client.ClientConnected += ClientOnPlayerJoin;
-        _client.ClientDisconnected += ClientOnPlayerLeft;
+        Client.Connected += ClientOnConnected;
+        Client.Disconnected += ClientOnDisconnected;
+        Client.ConnectionFailed += ClientOnConnectionFailed;
+        Client.ClientConnected += ClientOnPlayerJoin;
+        Client.ClientDisconnected += ClientOnPlayerLeft;
     }
 
     private void InitializeServer(SteamServer steamServer)
     {
-        _server = _useSteam ? new Server(steamServer) : new Server();
+        Server = UseSteam ? new Server(steamServer) : new Server();
 
-        _server.ClientConnected += ServerOnClientConnected;
-        _server.ClientDisconnected += ServerOnClientDisconnected;
+        Server.ClientConnected += ServerOnClientConnected;
+        Server.ClientDisconnected += ServerOnClientDisconnected;
     }
     
     #region ClientCallbacks
     private void ClientOnConnected(object sender, EventArgs e)
     {
-        _gameState = GameState.Lobby;
+        GameState = GameState.Lobby;
 
-        _clientMessages.SendClientConnected(_useSteam ? (ulong)SteamUser.GetSteamID() : new ulong());
+        ClientMessages.SendClientConnected(UseSteam ? (ulong)SteamUser.GetSteamID() : new ulong());
 
         PanelManager.Instance.EnablePanel(PanelType.Lobby);
     }
 
     private void ClientOnDisconnected(object sender, EventArgs e)
     {
-        switch (_gameState)
+        switch (GameState)
         {
             case GameState.Lobby:
                 LobbyManager.Instance.ClearLobby();
@@ -131,9 +120,9 @@ public class NetworkManager : Singleton<NetworkManager>
                 break;
         }
         
-        _gameState = GameState.OffLine;
+        GameState = GameState.OffLine;
         
-        if(!_useSteam) return;
+        if(!UseSteam) return;
         SteamLobbyManager.Instance.LeaveLobby();
     }
     
@@ -156,57 +145,57 @@ public class NetworkManager : Singleton<NetworkManager>
     #region ServerCallbacks
     private void ServerOnClientConnected(object sender, ServerClientConnectedEventArgs e)
     {
-        switch (_gameState)
+        switch (GameState)
         {
             case GameState.Gameplay:
-                _server.DisconnectClient(e.Client.Id);
+                Server.DisconnectClient(e.Client.Id);
                 break;
         }
     }
     
     private void ServerOnClientDisconnected(object sender, ClientDisconnectedEventArgs e)
     {
-        _serverMessages.SendPlayerDisconnected(e.Id);
+        ServerMessages.SendPlayerDisconnected(e.Id);
     }
     #endregion
 
     #region Client
     public void StartHost()
     {
-        if (_useSteam)
+        if (UseSteam)
         {
             SteamLobbyManager.Instance.CreateLobby(); ;
         }
         else
         {
-            _server.Start(_port, _maxPlayer);
-            _client.Connect($"127.0.0.1:{_port}");
+            Server.Start(_port, MaxPlayer);
+            Client.Connect($"127.0.0.1:{_port}");
         }
     }
     
     public void JoinLobby()
     {
-        if (_useSteam) return;
-        _client.Connect($"127.0.0.1:{_port}");
+        if (UseSteam) return;
+        Client.Connect($"127.0.0.1:{_port}");
     }
     
     public void Leave()
     {
-        _client.Disconnect();
+        Client.Disconnect();
         ClientOnDisconnected(new object(), EventArgs.Empty);
-        _server.Stop();
+        Server.Stop();
     }
 
     public void StartGame()
     {
-        if (_localPlayer.GetId != 1) return;
+        if (LocalPlayer.GetId != 1) return;
         
-        _clientMessages.SendStartGame();
+        ClientMessages.SendStartGame();
     }
 
     public void OnServerStartGame()
     {
-        _gameState = GameState.Gameplay;
+        GameState = GameState.Gameplay;
         SceneManager.LoadScene("GameplayScene", LoadSceneMode.Single);
     }
     #endregion

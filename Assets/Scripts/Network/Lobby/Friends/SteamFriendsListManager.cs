@@ -15,7 +15,7 @@ public class SteamFriendsListManager : MonoBehaviour
     private List<CSteamID> _friends = new List<CSteamID>();
     private void Start()
     {
-        if(NetworkManager.Instance.GetUseSteam) StartCoroutine(RefreshFriendsList());
+        if(NetworkManager.Instance.UseSteam) StartCoroutine(RefreshFriendsList());
     }
 
     private void GrabFriends()

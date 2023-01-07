@@ -22,7 +22,7 @@ public class PlayerIdentity : MonoBehaviour
     {
         _id = id;
 
-        if (_id == NetworkManager.Instance.GetClient.Id) { _isLocalPlayer = true; }
+        if (_id == NetworkManager.Instance.Client.Id) { _isLocalPlayer = true; }
 
         gameObject.name = newName;
     }

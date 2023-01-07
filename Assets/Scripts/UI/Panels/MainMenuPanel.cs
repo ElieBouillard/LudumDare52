@@ -11,7 +11,7 @@ public class MainMenuPanel : Panel
 
     private void Start()
     {
-        _joinGameButton.gameObject.SetActive(!NetworkManager.Instance.GetUseSteam);
+        _joinGameButton.gameObject.SetActive(!NetworkManager.Instance.UseSteam);
     }
     
     protected override void AssignButtonsReference()

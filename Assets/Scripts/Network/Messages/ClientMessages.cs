@@ -8,6 +8,7 @@ public class ClientMessages : MonoBehaviour
         ClientConnected = 1,
         StartGame,
         Ready,
+        Movements,
     }
     
     #region Send
@@ -15,19 +16,27 @@ public class ClientMessages : MonoBehaviour
     {
         Message message = Message.Create(MessageSendMode.reliable, MessagesId.ClientConnected);
         message.AddULong(steamId);
-        NetworkManager.Instance.GetClient.Send(message);
+        NetworkManager.Instance.Client.Send(message);
     }
     
     public void SendStartGame()
     {
         Message message = Message.Create(MessageSendMode.reliable, MessagesId.StartGame);
-        NetworkManager.Instance.GetClient.Send(message);
+        NetworkManager.Instance.Client.Send(message);
     }
 
     public void SendReady()
     {
         Message message = Message.Create(MessageSendMode.reliable, MessagesId.Ready);
-        NetworkManager.Instance.GetClient.Send(message);
+        NetworkManager.Instance.Client.Send(message);
+    }
+
+    public void SendMovements(Vector3 pos, Quaternion rot)
+    {
+        Message message = Message.Create(MessageSendMode.unreliable, MessagesId.Movements);
+        message.AddVector3(pos);
+        message.AddQuaternion(rot);
+        NetworkManager.Instance.Client.Send(message);
     }
     #endregion
 
@@ -43,7 +52,7 @@ public class ClientMessages : MonoBehaviour
     {
         ushort id = message.GetUShort();
         
-        switch (NetworkManager.Instance.GetGameState)
+        switch (NetworkManager.Instance.GameState)
         {
             case GameState.Lobby:
                 LobbyManager.Instance.RemovePlayerFromLobby(id);
@@ -53,7 +62,6 @@ public class ClientMessages : MonoBehaviour
                 GameManager.Instance.RemovePlayerFromGame(id);
                 break;
         }
-        
     } 
     
     [MessageHandler((ushort) ServerMessages.MessagesId.StartGame)]
@@ -66,6 +74,19 @@ public class ClientMessages : MonoBehaviour
     private static void OnServerInitializeClient(Message message)
     {
         GameManager.Instance.SpawnPlayers();
+    }
+
+    [MessageHandler((ushort) ServerMessages.MessagesId.Movements)]
+    private static void OnServerMovements(Message message)
+    {
+        Debug.Log("swag");
+        
+        ushort id = message.GetUShort();
+
+        if (!NetworkManager.Instance.Players.ContainsKey(id)) return;
+        
+        ((PlayerGameIdentity) NetworkManager.Instance.Players[id]).MovementReceiver.SetState(message.GetVector3(),
+            message.GetQuaternion());
     }
     #endregion
 }
