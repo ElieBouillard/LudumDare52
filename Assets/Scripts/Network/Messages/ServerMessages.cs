@@ -12,6 +12,7 @@ public class ServerMessages : MonoBehaviour
         Movements,
         Anims,
         Shoot,
+        RessourceTravel,
     }
 
     #region Send
@@ -77,6 +78,14 @@ public class ServerMessages : MonoBehaviour
         message.AddVector3(normal);
         NetworkManager.Instance.Server.SendToAll(message, id);
     }
+
+    private static void SendRessourceTravel(ushort playerId, ushort ressourceId)
+    {
+        Message message = Message.Create(MessageSendMode.reliable, MessagesId.RessourceTravel);
+        message.AddUShort(playerId);
+        message.AddUShort(ressourceId);
+        NetworkManager.Instance.Server.SendToAll(message, playerId);
+    }
     #endregion
 
     #region Received
@@ -115,6 +124,12 @@ public class ServerMessages : MonoBehaviour
     private static void OnClientShoot(ushort id, Message message)
     {
         SendShoot(id, message.GetVector3(), message.GetBool(), message.GetVector3());
+    }
+
+    [MessageHandler((ushort) ClientMessages.MessagesId.RessourceTravel)]
+    private static void OnRessourceTravel(ushort id, Message message)
+    {
+        SendRessourceTravel(id, message.GetUShort());
     }
     #endregion
 }

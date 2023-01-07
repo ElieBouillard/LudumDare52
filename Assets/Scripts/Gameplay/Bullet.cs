@@ -18,6 +18,8 @@ public class Bullet : MonoBehaviour
     {
         transform.position += (_targetPos - transform.position).normalized * _speed * Time.deltaTime;
 
+        Debug.Log((_targetPos - transform.position).magnitude);
+        
         if ((_targetPos - transform.position).magnitude <= 0.5f)
         {
             Destroy(gameObject);

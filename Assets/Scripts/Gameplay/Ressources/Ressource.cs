@@ -6,12 +6,16 @@ using UnityEngine;
 public class Ressource : MonoBehaviour
 {
     [SerializeField] private int _initialHealth = 3;
+    [SerializeField] private int _value = 1;
+    
     [SerializeField] private float _speedWhenCollected;
     
     private Collider _collider;
     private Outline _outline;
+
+    public RessourceType RessourceType = RessourceType.Fer;
     
-    public ushort Id { private set; get; }
+    public ushort Id;
     
     private int _currHealth;
 
@@ -48,11 +52,6 @@ public class Ressource : MonoBehaviour
         }
     }
 
-    public void Initialize(ushort id)
-    {
-        Id = id;
-    }
-    
     public void TakeDamage(ushort playerId, int damage = 1)
     {
         if (_isInTravel) return;
@@ -62,6 +61,7 @@ public class Ressource : MonoBehaviour
         if (_currHealth <= 0)
         {
             InitializeTravelToPlayer(playerId);
+            NetworkManager.Instance.ClientMessages.SendRessourceTravel(Id);
         }
     }
 
@@ -81,6 +81,8 @@ public class Ressource : MonoBehaviour
     public void Collected()
     {
         Debug.Log($"Collected by player {_targetPlayer.GetComponent<PlayerIdentity>().GetId}");
+
+        RessourceManager.Instance.AddRessource(RessourceType, _value);
         
         Destroy(gameObject);
     }
@@ -90,4 +92,11 @@ public class Ressource : MonoBehaviour
         if (_isInTravel) return;
         _outline.OutlineWidth = value ? 2f : 0f;
     }
+}
+
+public enum RessourceType
+{
+    Fer,
+    Plastic,
+    Energy
 }

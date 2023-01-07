@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices.WindowsRuntime;
 using RiptideNetworking;
 using UnityEngine;
 
@@ -11,6 +12,7 @@ public class ClientMessages : MonoBehaviour
         Movements,
         Anims,
         Shoot,
+        RessourceTravel,
     }
     
     #region Send
@@ -55,6 +57,13 @@ public class ClientMessages : MonoBehaviour
         message.AddVector3(pos);
         message.AddBool(hit);
         message.AddVector3(normal);
+        NetworkManager.Instance.Client.Send(message);
+    }
+
+    public void SendRessourceTravel(ushort ressourceId)
+    {
+        Message message = Message.Create(MessageSendMode.reliable, MessagesId.RessourceTravel);
+        message.AddUShort(ressourceId);
         NetworkManager.Instance.Client.Send(message);
     }
     #endregion
@@ -133,6 +142,22 @@ public class ClientMessages : MonoBehaviour
         if (NetworkManager.Instance.Players[id] is PlayerLobbyIdentity) return;
 
         ((PlayerGameIdentity) NetworkManager.Instance.Players[id]).Aim.Shoot(pos, hit ? normal : null);
+    }
+
+    [MessageHandler((ushort) ServerMessages.MessagesId.RessourceTravel)]
+    private static void OnServerRessourceTravel(Message message)
+    {
+        ushort playerId = message.GetUShort();
+        ushort ressourceId = message.GetUShort();
+        
+        foreach (var ressource in RessourceManager.Instance.Ressources)
+        {
+            if (ressource.Id == ressourceId)
+            {
+                ressource.InitializeTravelToPlayer(playerId);
+                return;
+            }
+        }
     }
     #endregion
 }

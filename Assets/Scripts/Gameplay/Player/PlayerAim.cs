@@ -43,7 +43,7 @@ public class PlayerAim : MonoBehaviour
                 Shoot(hit.point, hit.normal);
                 if (hit.collider.TryGetComponent(out Ressource ressource))
                 {
-                    GiveDamage(ressource);
+                    ressource.TakeDamage(_playerId);
                 }
             }
             else
@@ -88,10 +88,5 @@ public class PlayerAim : MonoBehaviour
         impactInstance.Play();
         
         Destroy(impactInstance, 2f);
-    }
-    
-    private void GiveDamage(Ressource ressource)
-    {
-        ressource.TakeDamage(_playerId);
     }
 }
