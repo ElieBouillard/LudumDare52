@@ -12,13 +12,13 @@ public class Bullet : MonoBehaviour
     public void Initialize(Vector3 pos)
     {
         _targetPos = pos;
+        
+        Destroy( gameObject, 2f);
     }
     
     private void Update()
     {
         transform.position += (_targetPos - transform.position).normalized * _speed * Time.deltaTime;
-
-        Debug.Log((_targetPos - transform.position).magnitude);
         
         if ((_targetPos - transform.position).magnitude <= 0.5f)
         {

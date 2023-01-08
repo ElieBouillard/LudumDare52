@@ -1264,6 +1264,9 @@ MonoBehaviour:
   _impactVFX: {fileID: 19815294, guid: 778204c4c02edbb4083f4aa23b83ad20, type: 3}
   _bullet: {fileID: 2628684340825427362, guid: 898fc418829a6034d8e1529b3242c6d3, type: 3}
   _spawnPoint: {fileID: 4952517956841153159}
+  _ignoreLayer:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!1 &4523993326800811652
 GameObject:
   m_ObjectHideFlags: 0
