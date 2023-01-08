@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Runtime.InteropServices.WindowsRuntime;
 using CMF;
 using UnityEngine;
@@ -10,7 +11,8 @@ public class PlayerAim : MonoBehaviour
     [SerializeField] private ParticleSystem _impactVFX;
     [SerializeField] private Bullet _bullet;
     [SerializeField] private Transform _spawnPoint;
-
+    [SerializeField] private float _reloadTime;
+    
     private NetworkManager _networkManager;
     private ushort _playerId;
     private bool _isLocal;
@@ -19,6 +21,9 @@ public class PlayerAim : MonoBehaviour
     private Ressource _lastRessource;
 
     public bool CanShoot = true;
+
+    private int _bulletAmount = 6;
+    private bool _isInReload;
     
     private void Start()
     {
@@ -31,13 +36,23 @@ public class PlayerAim : MonoBehaviour
     private void Update()
     {
         if (!_isLocal) return;
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            if (!_isInReload && _bulletAmount < 6)
+            {
+                StartCoroutine(Reload());
+            }
+        }
         
-        if(!CanShoot) return;
+        if(!CanShoot || _isInReload) return;
         
         OutlineRessources();
 
         if (_controller.IsSprinting || _controller.CurrentControllerState != AdvancedWalkerController.ControllerState.Grounded) return;
         
+        if(_bulletAmount <= 0) return;
+
         if (Input.GetMouseButtonDown(0))
         {
             if (Physics.Raycast(_camera.transform.position + _camera.transform.forward * 5f, _camera.transform.forward, out RaycastHit hit, Mathf.Infinity))
@@ -54,6 +69,14 @@ public class PlayerAim : MonoBehaviour
             {
                 _networkManager.ClientMessages.SendShoot(Camera.main.transform.position + Camera.main.transform.forward * 250f, false, Vector3.zero);
                 Shoot(Camera.main.transform.position + Camera.main.transform.forward * 250f, null);
+            }
+
+            _bulletAmount--;
+            BulletsPanel.Instance.UpdateBulletsAmount(_bulletAmount);
+            
+            if (_bulletAmount <= 0)
+            {
+                StartCoroutine(Reload());
             }
         }
     }
@@ -92,5 +115,20 @@ public class PlayerAim : MonoBehaviour
         impactInstance.Play();
         
         Destroy(impactInstance.gameObject, 2f);
+    }
+
+    private IEnumerator Reload()
+    {
+        _isInReload = true;
+        
+        BulletsPanel.Instance.StartReloadImage(_reloadTime);
+        
+        yield return new WaitForSeconds(_reloadTime);
+
+        BulletsPanel.Instance.UpdateBulletsAmount(6);
+        
+        _bulletAmount = 6;
+        
+        _isInReload = false;
     }
 }

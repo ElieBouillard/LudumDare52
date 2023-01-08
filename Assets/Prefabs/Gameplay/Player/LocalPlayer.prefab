@@ -206,6 +206,7 @@ MonoBehaviour:
   _impactVFX: {fileID: 19815294, guid: 7ebf68e5cddb6944d96f5a6721c2be76, type: 3}
   _bullet: {fileID: 2628684340825427362, guid: 898fc418829a6034d8e1529b3242c6d3, type: 3}
   _spawnPoint: {fileID: 3122667449662052314}
+  _reloadTime: 1.5
   CanShoot: 1
 --- !u!114 &8653698711689990496
 MonoBehaviour:
@@ -465,6 +466,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b01dcceecd84d7f4fa52155438110905, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPersistant: 0
   upperVerticalLimit: 60
   lowerVerticalLimit: 60
   cameraSpeed: 250
