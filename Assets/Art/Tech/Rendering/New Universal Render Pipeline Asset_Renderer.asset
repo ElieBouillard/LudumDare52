@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa88c583d29e12d44a27681d78207604, type: 3}
   m_Name: VolumetricLightScattering
   m_EditorClassIdentifier: 
-  m_Active: 1
+  m_Active: 0
   settings:
     resolutionScale: 0.599
     intensity: 0.152
