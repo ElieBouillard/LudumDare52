@@ -16,9 +16,9 @@ public class PlayerLobbyIdentity : PlayerIdentity
         ImageLoaded = Callback<AvatarImageLoaded_t>.Create(OnPlayerAvatarLoaded);
     }
     
-    public override void Initialize(ushort id, string newName)
+    public override void Initialize(ushort id, string newName, int teamId)
     {
-        base.Initialize(id, newName);
+        base.Initialize(id, newName, teamId);
 
         _playerPseudoText.text = newName;
 
@@ -29,9 +29,9 @@ public class PlayerLobbyIdentity : PlayerIdentity
         _localSprite.SetActive(id == networkManager.Client.Id);
     }
 
-    public override void Initialize(ushort id, ulong steamId)
+    public override void Initialize(ushort id, ulong steamId, int teamId)
     {
-        base.Initialize(id, steamId);
+        base.Initialize(id, steamId, teamId);
         
         LoadPlayerAvatar();
     }

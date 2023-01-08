@@ -32,9 +32,9 @@ public class PlayerGameIdentity : PlayerIdentity
         _distantHealth = GetComponent<PlayerDistantHealth>();
     }
 
-    public override void Initialize(ushort id, string newName)
+    public override void Initialize(ushort id, string newName, int teamId)
     {
-        base.Initialize(id, newName);
+        base.Initialize(id, newName, teamId);
 
         if (IsLocalPlayer)
         {

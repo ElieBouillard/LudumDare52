@@ -12,6 +12,7 @@ public class PlayerIdentity : MonoBehaviour
     private ushort _id;
     protected ulong _steamId;
     private bool _isLocalPlayer;
+    public int TeamId = -1;
     #endregion
     
     #region Getters
@@ -20,18 +21,20 @@ public class PlayerIdentity : MonoBehaviour
     public bool IsLocalPlayer => _isLocalPlayer;
     #endregion
 
-    public virtual void Initialize(ushort id, string newName)
+    public virtual void Initialize(ushort id, string newName, int teamId)
     {
         _id = id;
 
         if (_id == NetworkManager.Instance.Client.Id) { _isLocalPlayer = true; }
 
         gameObject.name = newName;
+
+        TeamId = teamId;
     }
     
-    public virtual void Initialize(ushort id, ulong steamId)
+    public virtual void Initialize(ushort id, ulong steamId, int teamId)
     {
-        Initialize(id, SteamFriends.GetFriendPersonaName((CSteamID)steamId));
+        Initialize(id, SteamFriends.GetFriendPersonaName((CSteamID)steamId), teamId);
         
         _steamId = steamId;
     }

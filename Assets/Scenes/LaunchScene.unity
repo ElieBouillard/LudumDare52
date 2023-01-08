@@ -202,6 +202,7 @@ MonoBehaviour:
   MaxPlayer: 4
   _port: 7777
   GameState: 1
+  PlayerReadyCount: 0
 --- !u!4 &2102392012
 Transform:
   m_ObjectHideFlags: 0

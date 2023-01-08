@@ -24,8 +24,8 @@ public class NetworkManager : Singleton<NetworkManager>
     public GameState GameState = GameState.OffLine;
     public Dictionary<ushort, PlayerIdentity> Players = new Dictionary<ushort, PlayerIdentity>();
 
+    public Dictionary<ushort, PlayerIdentity> Team0 = new Dictionary<ushort, PlayerIdentity>();
     public Dictionary<ushort, PlayerIdentity> Team1 = new Dictionary<ushort, PlayerIdentity>();
-    public Dictionary<ushort, PlayerIdentity> Team2 = new Dictionary<ushort, PlayerIdentity>();
 
     public PlayerIdentity  LocalPlayer { private set; get; }
     public ClientMessages ClientMessages { private set; get; }
@@ -127,7 +127,12 @@ public class NetworkManager : Singleton<NetworkManager>
         }
         
         GameState = GameState.OffLine;
+
+        PlayerReadyCount = 0;
         
+        Team0.Clear();
+        Team1.Clear();
+
         if(!UseSteam) return;
         SteamLobbyManager.Instance.LeaveLobby();
     }
@@ -187,8 +192,6 @@ public class NetworkManager : Singleton<NetworkManager>
     
     public void Leave()
     {
-        PlayerReadyCount = 0;
-        
         Client.Disconnect();
         ClientOnDisconnected(new object(), EventArgs.Empty);
         Server.Stop();
@@ -211,6 +214,20 @@ public class NetworkManager : Singleton<NetworkManager>
     #region Server
     
     #endregion
+    
+    [ContextMenu("DebugTeams")]
+    public void DebugTeams()
+    {
+        foreach (var player in Team0)
+        {
+            Debug.Log($"Team0 : {player.Value.gameObject.name}");
+        }
+        
+        foreach (var player in Team1)
+        {
+            Debug.Log($"Team1 : {player.Value.gameObject.name}");
+        }
+    }
 }
 
 public enum GameState

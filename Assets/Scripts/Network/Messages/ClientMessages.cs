@@ -88,7 +88,7 @@ public class ClientMessages : MonoBehaviour
     [MessageHandler((ushort) ServerMessages.MessagesId.PlayerConnectedToLobby)]
     private static void OnClientConnectedToLobby(Message message)
     {
-        LobbyManager.Instance.AddPlayerToLobby(message.GetUShort(), message.GetULong());
+        LobbyManager.Instance.AddPlayerToLobby(message.GetUShort(), message.GetULong(), message.GetInt());
     } 
     
     [MessageHandler((ushort) ServerMessages.MessagesId.PlayerDisconnected)]

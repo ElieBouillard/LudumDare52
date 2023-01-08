@@ -91,7 +91,7 @@ public class PlayerStatistics : MonoBehaviour
         SetupStatistics();
         UpdateInterface();
         
-        transform.position = GameManager.Instance.GetRespawnPos();
+        transform.position = GameManager.Instance.GetRespawnPos(_player.TeamId);
 
         _player.EnableInput(true);
 
