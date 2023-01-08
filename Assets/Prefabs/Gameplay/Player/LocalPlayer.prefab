@@ -661,6 +661,30 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerModel
       objectReference: {fileID: 0}
+    - target: {fileID: 6436033859791638442, guid: 32a9841f6d070e54695c508024217613, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.61
+      objectReference: {fileID: 0}
+    - target: {fileID: 6436033859791638442, guid: 32a9841f6d070e54695c508024217613, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.61
+      objectReference: {fileID: 0}
+    - target: {fileID: 6436033859791638442, guid: 32a9841f6d070e54695c508024217613, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.61
+      objectReference: {fileID: 0}
+    - target: {fileID: 6436033859791638442, guid: 32a9841f6d070e54695c508024217613, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.021
+      objectReference: {fileID: 0}
+    - target: {fileID: 6436033859791638442, guid: 32a9841f6d070e54695c508024217613, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.055
+      objectReference: {fileID: 0}
+    - target: {fileID: 6436033859791638442, guid: 32a9841f6d070e54695c508024217613, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.012
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32a9841f6d070e54695c508024217613, type: 3}
 --- !u!4 &3122667449662052314 stripped
