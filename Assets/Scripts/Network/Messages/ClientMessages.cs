@@ -13,6 +13,7 @@ public class ClientMessages : MonoBehaviour
         Anims,
         Shoot,
         RessourceTravel,
+        Death,
     }
     
     #region Send
@@ -64,6 +65,12 @@ public class ClientMessages : MonoBehaviour
     {
         Message message = Message.Create(MessageSendMode.reliable, MessagesId.RessourceTravel);
         message.AddUShort(ressourceId);
+        NetworkManager.Instance.Client.Send(message);
+    }
+
+    public void SendDeath()
+    {
+        Message message = Message.Create(MessageSendMode.reliable, MessagesId.Death);
         NetworkManager.Instance.Client.Send(message);
     }
     #endregion
@@ -158,6 +165,12 @@ public class ClientMessages : MonoBehaviour
                 return;
             }
         }
+    }
+
+    [MessageHandler((ushort) ServerMessages.MessagesId.Death)]
+    private static void OnServerDeath(Message message)
+    {
+        ((PlayerGameIdentity)NetworkManager.Instance.Players[message.GetUShort()]).Animations.PlayDeathAnim();
     }
     #endregion
 }

@@ -131,6 +131,7 @@ MonoBehaviour:
   verticalInputAxis: Vertical
   jumpKey: 32
   useRawInput: 1
+  IsInputLock: 0
 --- !u!114 &4523993326320803590
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -205,6 +206,7 @@ MonoBehaviour:
   _impactVFX: {fileID: 19815294, guid: 7ebf68e5cddb6944d96f5a6721c2be76, type: 3}
   _bullet: {fileID: 2628684340825427362, guid: 898fc418829a6034d8e1529b3242c6d3, type: 3}
   _spawnPoint: {fileID: 3122667449662052314}
+  CanShoot: 1
 --- !u!114 &8653698711689990496
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -225,6 +227,9 @@ MonoBehaviour:
   _decreaseOxygen: 1
   _decreaseFood: 1
   _decreaseWater: 1
+  _increaseHealth: 10
+  _increaseOxygen: 10
+  _animator: {fileID: 7172766236145833347}
 --- !u!1 &4523993326800811652
 GameObject:
   m_ObjectHideFlags: 0
@@ -657,3 +662,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _smooth: 10
   _controller: {fileID: 4523993326320803610}
+--- !u!95 &7172766236145833347 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 8120803763688221709, guid: 32a9841f6d070e54695c508024217613, type: 3}
+  m_PrefabInstance: {fileID: 1384904287949814158}
+  m_PrefabAsset: {fileID: 0}

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
 public class PlayerStatistics : MonoBehaviour
@@ -17,6 +18,14 @@ public class PlayerStatistics : MonoBehaviour
     [SerializeField] private float _decreaseFood;
     [SerializeField] private float _decreaseWater;
 
+    [Space(10)] [Header("IncreaseValue")] 
+    [SerializeField] private float _increaseHealth;
+    [SerializeField] private float _increaseOxygen;
+
+    [Space(10)][Header("References")]
+    [SerializeField] private Animator _animator;
+    
+    private PlayerGameIdentity _player;
     private StatisticsPanel _statisticsPanel;
     
     private float _currHealth;
@@ -25,9 +34,14 @@ public class PlayerStatistics : MonoBehaviour
     private float _currWater;
 
     private bool _isInBase;
+
+    private bool _isDead;
     
+    private static readonly int Die = Animator.StringToHash("Die");
+
     private void Start()
     {
+        _player = GetComponent<PlayerGameIdentity>();
         _statisticsPanel = StatisticsPanel.Instance;
         
         SetupStatistics();
@@ -36,18 +50,65 @@ public class PlayerStatistics : MonoBehaviour
 
     private void Update()
     {
-        if (_isInBase) return;
+        if (_isDead) return;
         
-        _currHealth -= _decreaseHealth * Time.deltaTime;
-        _currOxygen -= _decreaseOxygen * Time.deltaTime;
-        _currFood -= _decreaseFood * Time.deltaTime;
-        _currWater -= _decreaseWater * Time.deltaTime;
-
         UpdateInterface();
+        
+        if(_currFood > 0) _currFood -= _decreaseFood * Time.deltaTime;
+        if(_currWater > 0) _currWater -= _decreaseWater * Time.deltaTime;
+
+        if (_isInBase)
+        {
+            if(_currOxygen < _initialOxygen) _currOxygen += _increaseOxygen * Time.deltaTime;
+        }
+        else
+        {
+            _currOxygen -= _decreaseOxygen * Time.deltaTime;
+        }
+
+        if (_currOxygen <= 0) _currHealth -= _decreaseHealth * Time.deltaTime;
+        if (_currFood <= 0) _currHealth -= _decreaseHealth * Time.deltaTime;
+        if (_currWater <= 0) _currHealth -= _decreaseHealth * Time.deltaTime;
+
+        if (_currHealth <= 0)
+        {
+            Death();
+        }
     }
 
+    private void Death()
+    {
+        _animator.SetBool(Die, true);
+
+        _isDead = true;
+        
+        _player.EnableInput(false);
+        
+        NetworkManager.Instance.ClientMessages.SendDeath();
+        
+        StartCoroutine(Respawn());
+    }
+
+    private IEnumerator Respawn()
+    {
+        yield return new WaitForSeconds(5f);
+
+        _animator.SetBool(Die, false);
+        
+        SetupStatistics();
+        UpdateInterface();
+        
+        transform.position = GameManager.Instance.GetRespawnPos();
+
+        _player.EnableInput(true);
+
+        _isDead = false;
+    }   
+    
     public void SetupStatistics()
     {
+        _isInBase = true;
+        
         _currHealth = _initialHealth;
         _currOxygen = _initialOxygen;
         _currFood = _initialFood;
@@ -57,5 +118,21 @@ public class PlayerStatistics : MonoBehaviour
     private void UpdateInterface()
     {
         _statisticsPanel.SetBarValue(_currHealth / _initialHealth, _currOxygen / _initialOxygen, _currFood / _initialFood, _currWater/ _initialWater );
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.GetComponent<Base>())
+        {
+            _isInBase = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.GetComponent<Base>())
+        {
+            _isInBase = false;
+        }
     }
 }

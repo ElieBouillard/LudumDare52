@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using RiptideNetworking;
 using UnityEngine;
 
@@ -13,6 +14,7 @@ public class ServerMessages : MonoBehaviour
         Anims,
         Shoot,
         RessourceTravel,
+        Death,
     }
 
     #region Send
@@ -86,6 +88,13 @@ public class ServerMessages : MonoBehaviour
         message.AddUShort(ressourceId);
         NetworkManager.Instance.Server.SendToAll(message, playerId);
     }
+
+    private static void SendDeath(ushort id)
+    {
+        Message message = Message.Create(MessageSendMode.reliable, MessagesId.Death);
+        message.AddUShort(id);
+        NetworkManager.Instance.Server.SendToAll(message, id);
+    }
     #endregion
 
     #region Received
@@ -130,6 +139,12 @@ public class ServerMessages : MonoBehaviour
     private static void OnRessourceTravel(ushort id, Message message)
     {
         SendRessourceTravel(id, message.GetUShort());
+    }
+
+    [MessageHandler((ushort) ClientMessages.MessagesId.Death)]
+    private static void OnDeath(ushort id, Message message)
+    {
+        SendDeath(id);
     }
     #endregion
 }

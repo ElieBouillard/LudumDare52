@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
 namespace CMF
@@ -14,8 +15,12 @@ namespace CMF
 		//If this is enabled, Unity's internal input smoothing is bypassed;
 		public bool useRawInput = true;
 
+		public bool IsInputLock = false;
+		
         public override float GetHorizontalMovementInput()
-		{
+        {
+	        if (IsInputLock) return 0f;
+			
 			if(useRawInput)
 				return Input.GetAxisRaw(horizontalInputAxis);
 			else
@@ -24,6 +29,8 @@ namespace CMF
 
 		public override float GetVerticalMovementInput()
 		{
+	        if (IsInputLock) return 0f;
+	        
 			if(useRawInput)
 				return Input.GetAxisRaw(verticalInputAxis);
 			else
@@ -32,6 +39,8 @@ namespace CMF
 
 		public override bool IsJumpKeyPressed()
 		{
+	        if (IsInputLock) return false;
+			
 			return Input.GetKey(jumpKey);
 		}
     }

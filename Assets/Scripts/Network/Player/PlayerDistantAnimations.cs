@@ -13,7 +13,8 @@ public class PlayerDistantAnimations : MonoBehaviour
     private static readonly int VelocityXParameter = Animator.StringToHash("VelocityX");
     private static readonly int VelocityYParameter = Animator.StringToHash("VelocityY");
     private static readonly int JumpParameter = Animator.StringToHash("Jump");
-
+    private static readonly int Die = Animator.StringToHash("Die");
+    
     private void Awake()
     {
         _animator = GetComponent<Animator>();
@@ -31,10 +32,23 @@ public class PlayerDistantAnimations : MonoBehaviour
     }
 
     private Vector2 _targetVelocity;
-    
+
+
     private void Update()
     {
         _animator.SetFloat(VelocityXParameter, Mathf.Lerp(_animator.GetFloat(VelocityXParameter), _targetVelocity.x, _smooth * Time.deltaTime)); 
         _animator.SetFloat(VelocityYParameter, Mathf.Lerp(_animator.GetFloat(VelocityYParameter),  _targetVelocity.y,_smooth * Time.deltaTime));
+    }
+
+    public void PlayDeathAnim()
+    {
+        _animator.SetBool(Die, true);
+        StartCoroutine(StopDeathAnim());
+    }
+
+    private IEnumerator StopDeathAnim()
+    {
+        yield return new WaitForSeconds(5f);
+        _animator.SetBool(Die, false);
     }
 }

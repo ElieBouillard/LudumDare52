@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using Steamworks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -28,6 +29,11 @@ public class GameManager : Singleton<GameManager>
         NetworkManager.Instance.ClientMessages.SendReady();
     }
 
+    public Vector3 GetRespawnPos()
+    {
+        return _spawnPoints[0].position;
+    }
+    
     public void SpawnPlayers()
     {
         NetworkManager networkManager = NetworkManager.Instance;

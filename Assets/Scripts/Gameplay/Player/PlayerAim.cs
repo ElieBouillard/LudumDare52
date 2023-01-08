@@ -18,6 +18,8 @@ public class PlayerAim : MonoBehaviour
     
     private Ressource _lastRessource;
 
+    public bool CanShoot = true;
+    
     private void Start()
     {
         _networkManager = NetworkManager.Instance;
@@ -29,6 +31,8 @@ public class PlayerAim : MonoBehaviour
     private void Update()
     {
         if (!_isLocal) return;
+        
+        if(!CanShoot) return;
         
         OutlineRessources();
 

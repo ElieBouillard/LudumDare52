@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using CMF;
 using Steamworks;
 using TMPro;
 using UnityEngine;
@@ -15,11 +16,14 @@ public class PlayerGameIdentity : PlayerIdentity
     
     public PlayerAim Aim { private set; get; }
 
+    private CharacterKeyboardInput _input;
+    
     private void Awake()
     {
         MovementReceiver = GetComponent<MovementReceiver>();
         Animations = GetComponentInChildren<PlayerDistantAnimations>();
         Aim = GetComponent<PlayerAim>();
+        _input = GetComponent<CharacterKeyboardInput>();
     }
 
     public override void Initialize(ushort id, string newName)
@@ -28,5 +32,11 @@ public class PlayerGameIdentity : PlayerIdentity
 
         if (_pseudoText == null) return;
         _pseudoText.text = newName;
+    }
+
+    public void EnableInput(bool value)
+    {
+        _input.IsInputLock = !value;
+        Aim.CanShoot = value;
     }
 }
