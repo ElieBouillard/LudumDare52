@@ -89,6 +89,10 @@ public class PlayerAim : MonoBehaviour
                 Shoot(Camera.main.transform.position + Camera.main.transform.forward * 250f, null);
             }
 
+            Camera.main.transform.DOKill();
+            Camera.main.transform.DOLocalRotate(new Vector3(-2.5f, Random.Range(0,2) == 0 ? 1 : -1, 0), 0.1f).SetEase(Ease.Linear);
+            Camera.main.transform.DOLocalRotate(new Vector3(0, 0, 0), 0.2f).SetDelay(0.1f).SetEase(Ease.Linear);
+            
             _bulletAmount--;
             BulletsPanel.Instance.UpdateBulletsAmount(_bulletAmount);
             
@@ -125,10 +129,6 @@ public class PlayerAim : MonoBehaviour
     
     public void Shoot(Vector3 targetPos, Vector3? normal)
     {
-        Camera.main.transform.DOKill();
-        Camera.main.transform.DOLocalRotate(new Vector3(-2.5f, Random.Range(0,2) == 0 ? 1 : -1, 0), 0.1f).SetEase(Ease.Linear);
-        Camera.main.transform.DOLocalRotate(new Vector3(0, 0, 0), 0.2f).SetDelay(0.1f).SetEase(Ease.Linear);
-        
         _muzzleFlashVFX.Play();
         Bullet bullet = Instantiate(_bullet, _spawnPoint.position, _spawnPoint.rotation);
         bullet.Initialize(targetPos);
