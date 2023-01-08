@@ -85,8 +85,11 @@ public class PlayerAim : MonoBehaviour
 
                 if (hit.collider.TryGetComponent(out PlayerGameIdentity player))
                 {
-                    player.GetComponent<PlayerDistantHealth>().TakeDamage(_damage);
-                    _networkManager.ClientMessages.SendDamage(player.GetId, _damage);
+                    if (player.TeamId != _networkManager.LocalPlayer.TeamId)
+                    {
+                        player.GetComponent<PlayerDistantHealth>().TakeDamage(_damage);
+                        _networkManager.ClientMessages.SendDamage(player.GetId, _damage);
+                    }
                 }
             }
             else

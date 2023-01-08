@@ -376,7 +376,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80f5c9cc38c53b74d9a8f5aca862775f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TeamId: -1
   _pseudoText: {fileID: 6404652958349400722}
+  _cameraInput: {fileID: 0}
 --- !u!136 &5526070872069474699
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -421,6 +423,8 @@ MonoBehaviour:
   _bullet: {fileID: 2628684340825427362, guid: 898fc418829a6034d8e1529b3242c6d3, type: 3}
   _spawnPoint: {fileID: 8258948778924267626}
   _reloadTime: 0
+  _damage: 0
+  _shootDelay: 0
   CanShoot: 1
 --- !u!114 &5462627808821169503
 MonoBehaviour:
@@ -436,6 +440,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _initialHealth: 100
   _healthBarImage: {fileID: 3310231207753602195}
+  _colors:
+  - {r: 0, g: 1, b: 0.27395368, a: 1}
+  - {r: 1, g: 0, b: 0, a: 1}
 --- !u!1 &6103677676966591046
 GameObject:
   m_ObjectHideFlags: 0

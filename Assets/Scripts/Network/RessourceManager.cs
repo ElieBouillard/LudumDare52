@@ -34,8 +34,8 @@ public class RessourceManager : Singleton<RessourceManager>
 
     private void UpdateInterface()
     {
-        _ferText.text = $"Fer : {RessourceInventory[RessourceType.Fer]}";
-        _plasticText.text = $"Plastic : {RessourceInventory[RessourceType.Plastic]}";
-        _energyText.text = $"Energy : {RessourceInventory[RessourceType.Energy]}";
+        _ferText.text = RessourceInventory[RessourceType.Fer].ToString();
+        _plasticText.text = RessourceInventory[RessourceType.Plastic].ToString();
+        _energyText.text = RessourceInventory[RessourceType.Energy].ToString();
     }
 }

@@ -8,12 +8,15 @@ public class PlayerDistantHealth : MonoBehaviour
 {
     [SerializeField] private float _initialHealth;
     [SerializeField] private Image _healthBarImage;
-    
+    [SerializeField] private Color[] _colors;
+
     private float _currHealth;
 
-    private void Awake()
+    private void Start()
     {
         InitializeHealth();
+
+        _healthBarImage.color = NetworkManager.Instance.LocalPlayer.TeamId == GetComponent<PlayerIdentity>().TeamId ? _colors[0] : _colors[1];
     }
 
     public void InitializeHealth()

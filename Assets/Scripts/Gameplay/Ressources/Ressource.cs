@@ -80,9 +80,12 @@ public class Ressource : MonoBehaviour
     
     public void Collected()
     {
-        Debug.Log($"Collected by player {_targetPlayer.GetComponent<PlayerIdentity>().GetId}");
+        PlayerIdentity player = _targetPlayer.GetComponent<PlayerIdentity>();
+        
+        Debug.Log($"Collected by player {player.GetId}");
 
-        RessourceManager.Instance.AddRessource(RessourceType, _value);
+        if(player.TeamId == NetworkManager.Instance.LocalPlayer.TeamId)
+            RessourceManager.Instance.AddRessource(RessourceType, _value);
         
         Destroy(gameObject);
     }
