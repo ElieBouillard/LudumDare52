@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using RiptideNetworking;
 using UnityEngine;
 
@@ -10,6 +9,7 @@ public class ServerMessages : MonoBehaviour
         PlayerDisconnected,
         StartGame,
         InitializeGameplay,
+        InitializeGame,
         Movements,
         Anims,
         Shoot,
@@ -54,6 +54,12 @@ public class ServerMessages : MonoBehaviour
         NetworkManager.Instance.Server.Send(message, id);
     }
 
+    private static void SendInitializeGame()
+    {
+        Message message = Message.Create(MessageSendMode.reliable, MessagesId.InitializeGame);
+        NetworkManager.Instance.Server.SendToAll(message);
+    }
+    
     private static void SendMovements(ushort id, Vector3 pos, Quaternion rot)
     {
         Message message = Message.Create(MessageSendMode.unreliable, MessagesId.Movements);
@@ -124,6 +130,13 @@ public class ServerMessages : MonoBehaviour
     private static void OnClientReady(ushort id, Message message)
     {
         SendInitializeClient(id);
+
+        NetworkManager.Instance.PlayerReadyCount++;
+        
+        if (NetworkManager.Instance.Players.Count == NetworkManager.Instance.PlayerReadyCount)
+        {
+            SendInitializeGame();
+        }
     }
 
     [MessageHandler((ushort) ClientMessages.MessagesId.Movements)]

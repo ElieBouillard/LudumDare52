@@ -56,6 +56,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _pseudoText: {fileID: 0}
+  _cameraInput: {fileID: 4523993327300135190}
 --- !u!114 &4523993326320803609
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -486,6 +487,7 @@ MonoBehaviour:
   invertHorizontalInput: 0
   invertVerticalInput: 0
   mouseInputMultiplier: 0.01
+  IsInputLock: 0
 --- !u!1 &4523993327393860554
 GameObject:
   m_ObjectHideFlags: 0

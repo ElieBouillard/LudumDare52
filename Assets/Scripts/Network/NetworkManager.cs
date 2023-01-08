@@ -23,6 +23,10 @@ public class NetworkManager : Singleton<NetworkManager>
     public Client Client { private set; get; }
     public GameState GameState = GameState.OffLine;
     public Dictionary<ushort, PlayerIdentity> Players = new Dictionary<ushort, PlayerIdentity>();
+
+    public Dictionary<ushort, PlayerIdentity> Team1 = new Dictionary<ushort, PlayerIdentity>();
+    public Dictionary<ushort, PlayerIdentity> Team2 = new Dictionary<ushort, PlayerIdentity>();
+
     public PlayerIdentity  LocalPlayer { private set; get; }
     public ClientMessages ClientMessages { private set; get; }
     public ServerMessages ServerMessages { private set; get; }
@@ -31,6 +35,8 @@ public class NetworkManager : Singleton<NetworkManager>
     #region Setters
     public void SetLocalPlayer(PlayerIdentity player) => LocalPlayer = player;
     #endregion
+
+    public int PlayerReadyCount = 0;
     
     protected override void Awake()
     {
@@ -181,6 +187,8 @@ public class NetworkManager : Singleton<NetworkManager>
     
     public void Leave()
     {
+        PlayerReadyCount = 0;
+        
         Client.Disconnect();
         ClientOnDisconnected(new object(), EventArgs.Empty);
         Server.Stop();
@@ -189,7 +197,7 @@ public class NetworkManager : Singleton<NetworkManager>
     public void StartGame()
     {
         if (LocalPlayer.GetId != 1) return;
-        
+
         ClientMessages.SendStartGame();
     }
 

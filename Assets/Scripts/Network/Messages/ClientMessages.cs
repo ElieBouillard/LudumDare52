@@ -120,6 +120,12 @@ public class ClientMessages : MonoBehaviour
         GameManager.Instance.SpawnPlayers();
     }
 
+    [MessageHandler((ushort) ServerMessages.MessagesId.InitializeGame)]
+    private static void OnServerInitializeGame(Message message)
+    {
+        PanelManager.Instance.EnableGame();
+    }
+    
     [MessageHandler((ushort) ServerMessages.MessagesId.Movements)]
     private static void OnServerMovements(Message message)
     {

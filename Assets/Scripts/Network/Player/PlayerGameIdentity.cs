@@ -20,6 +20,8 @@ public class PlayerGameIdentity : PlayerIdentity
 
     private CharacterKeyboardInput _input;
 
+    [SerializeField] private CameraMouseInput _cameraInput;
+    
     private void Awake()
     {
         MovementReceiver = GetComponent<MovementReceiver>();
@@ -34,13 +36,20 @@ public class PlayerGameIdentity : PlayerIdentity
     {
         base.Initialize(id, newName);
 
-        if (_pseudoText == null) return;
-        _pseudoText.text = newName;
+        if (IsLocalPlayer)
+        {
+            EnableInput(false);
+        }
+        else
+        {
+            _pseudoText.text = newName;
+        }
     }
 
     public void EnableInput(bool value)
     {
         _input.IsInputLock = !value;
+        _cameraInput.IsInputLock = !value;
         Aim.CanShoot = value;
     }
 }

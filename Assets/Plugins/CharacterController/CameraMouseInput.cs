@@ -20,10 +20,12 @@ namespace CMF
         //All mouse input will be multiplied by this value;
         public float mouseInputMultiplier = 0.01f;
 
+        public bool IsInputLock;
+        
 	    public override float GetHorizontalCameraInput()
         {
             //Get raw mouse input;
-            float _input = Input.GetAxisRaw(mouseHorizontalAxis);
+            float _input = IsInputLock ? 0 : Input.GetAxisRaw(mouseHorizontalAxis);
             
             //Since raw mouse input is already time-based, we need to correct for this before passing the input to the camera controller;
             if(Time.timeScale > 0f && Time.deltaTime > 0f)
@@ -47,7 +49,7 @@ namespace CMF
         public override float GetVerticalCameraInput()
         {
            //Get raw mouse input;
-            float _input = -Input.GetAxisRaw(mouseVerticalAxis);
+            float _input = IsInputLock ? 0 : -Input.GetAxisRaw(mouseVerticalAxis);
             
             //Since raw mouse input is already time-based, we need to correct for this before passing the input to the camera controller;
             if(Time.timeScale > 0f && Time.deltaTime > 0f)

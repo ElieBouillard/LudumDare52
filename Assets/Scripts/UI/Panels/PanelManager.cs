@@ -10,9 +10,13 @@ public class PanelManager : Singleton<PanelManager>
 {
     [SerializeField] private Panel[] _panels;
     [SerializeField] private Image _crosshair;
+
+    [SerializeField] private GameObject _waitForPlayersPanel;
+    [SerializeField] private CooldownPanel _cooldownPanel;
+    
     private NetworkManager _networkManager;
     private bool _isPause;
-    
+
     protected override void Awake()
     {
         base.Awake();
@@ -64,6 +68,17 @@ public class PanelManager : Singleton<PanelManager>
         EnablePanel(value ? PanelType.Pause : PanelType.MainMenu);
         _isPause = value;
         EnableCursor(value);
+
+        if (!value) if (!_cooldownPanel.GameIsStarted) return;
+        
+        ((PlayerGameIdentity)NetworkManager.Instance.LocalPlayer).EnableInput(!value);
+    }
+
+    public void EnableGame()
+    {
+        _waitForPlayersPanel.SetActive(false);
+        _cooldownPanel.gameObject.SetActive(true);
+        _cooldownPanel.StartCouldown();
     }
 }
 
