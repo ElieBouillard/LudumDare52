@@ -15,6 +15,7 @@ public class ServerMessages : MonoBehaviour
         Shoot,
         RessourceTravel,
         Death,
+        GiveDamage,
     }
 
     #region Send
@@ -95,6 +96,14 @@ public class ServerMessages : MonoBehaviour
         message.AddUShort(id);
         NetworkManager.Instance.Server.SendToAll(message, id);
     }
+
+    private static void SendGiveDamage(ushort playerShoot, ushort playerHit, float damage)
+    {
+        Message message = Message.Create(MessageSendMode.reliable, MessagesId.GiveDamage);
+        message.AddUShort(playerHit);
+        message.AddFloat(damage);
+        NetworkManager.Instance.Server.SendToAll(message, playerShoot);
+    }
     #endregion
 
     #region Received
@@ -145,6 +154,12 @@ public class ServerMessages : MonoBehaviour
     private static void OnDeath(ushort id, Message message)
     {
         SendDeath(id);
+    }
+
+    [MessageHandler((ushort) ClientMessages.MessagesId.GiveDamage)]
+    private static void OnGiveDamage(ushort id, Message message)
+    {
+        SendGiveDamage(id, message.GetUShort(), message.GetFloat());
     }
     #endregion
 }

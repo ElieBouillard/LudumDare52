@@ -207,6 +207,7 @@ MonoBehaviour:
   _bullet: {fileID: 2628684340825427362, guid: 898fc418829a6034d8e1529b3242c6d3, type: 3}
   _spawnPoint: {fileID: 3122667449662052314}
   _reloadTime: 1.5
+  _damage: 10
   CanShoot: 1
 --- !u!114 &8653698711689990496
 MonoBehaviour:
@@ -224,10 +225,10 @@ MonoBehaviour:
   _initialOxygen: 100
   _initialFood: 100
   _initialWater: 100
-  _decreaseHealth: 1
-  _decreaseOxygen: 1
-  _decreaseFood: 1
-  _decreaseWater: 1
+  _decreaseHealth: 0
+  _decreaseOxygen: 0
+  _decreaseFood: 0
+  _decreaseWater: 0
   _increaseHealth: 10
   _increaseOxygen: 10
   _animator: {fileID: 7172766236145833347}

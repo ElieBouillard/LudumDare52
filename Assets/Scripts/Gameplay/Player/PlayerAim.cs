@@ -12,6 +12,7 @@ public class PlayerAim : MonoBehaviour
     [SerializeField] private Bullet _bullet;
     [SerializeField] private Transform _spawnPoint;
     [SerializeField] private float _reloadTime;
+    [SerializeField] private float _damage;
     
     private NetworkManager _networkManager;
     private ushort _playerId;
@@ -60,9 +61,16 @@ public class PlayerAim : MonoBehaviour
                 _networkManager.ClientMessages.SendShoot(hit.point, true, hit.normal);
                 
                 Shoot(hit.point, hit.normal);
+                
                 if (hit.collider.TryGetComponent(out Ressource ressource))
                 {
                     ressource.TakeDamage(_playerId);
+                }
+
+                if (hit.collider.TryGetComponent(out PlayerGameIdentity player))
+                {
+                    player.GetComponent<PlayerDistantHealth>().TakeDamage(_damage);
+                    _networkManager.ClientMessages.SendDamage(player.GetId, _damage);
                 }
             }
             else
@@ -110,7 +118,7 @@ public class PlayerAim : MonoBehaviour
         bullet.Initialize(targetPos);
 
         if (normal == null) return;
-        ParticleSystem impactInstance = Instantiate(_muzzleFlashVFX, targetPos, Quaternion.identity);
+        ParticleSystem impactInstance = Instantiate(_impactVFX, targetPos, Quaternion.identity);
         impactInstance.transform.forward = normal.Value;
         impactInstance.Play();
         

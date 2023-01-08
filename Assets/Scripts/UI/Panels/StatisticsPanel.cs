@@ -16,7 +16,7 @@ public class StatisticsPanel : Singleton<StatisticsPanel>
     {
         _healthBar.fillAmount = healthAmount;
         _oxygenBar.fillAmount = oxygenAmount;
-        _foodBar.fillAmount = foodAmount;
-        _waterBar.fillAmount = waterAmount;
+        // _foodBar.fillAmount = foodAmount;
+        // _waterBar.fillAmount = waterAmount;
     }
 }

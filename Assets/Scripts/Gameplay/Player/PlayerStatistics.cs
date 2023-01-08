@@ -54,8 +54,8 @@ public class PlayerStatistics : MonoBehaviour
         
         UpdateInterface();
         
-        if(_currFood > 0) _currFood -= _decreaseFood * Time.deltaTime;
-        if(_currWater > 0) _currWater -= _decreaseWater * Time.deltaTime;
+        // if(_currFood > 0) _currFood -= _decreaseFood * Time.deltaTime;
+        // if(_currWater > 0) _currWater -= _decreaseWater * Time.deltaTime;
 
         if (_isInBase)
         {
@@ -67,8 +67,8 @@ public class PlayerStatistics : MonoBehaviour
         }
 
         if (_currOxygen <= 0) _currHealth -= _decreaseHealth * Time.deltaTime;
-        if (_currFood <= 0) _currHealth -= _decreaseHealth * Time.deltaTime;
-        if (_currWater <= 0) _currHealth -= _decreaseHealth * Time.deltaTime;
+        // if (_currFood <= 0) _currHealth -= _decreaseHealth * Time.deltaTime;
+        // if (_currWater <= 0) _currHealth -= _decreaseHealth * Time.deltaTime;
 
         if (_currHealth <= 0)
         {
@@ -76,6 +76,11 @@ public class PlayerStatistics : MonoBehaviour
         }
     }
 
+    public void TakeDamage(float value)
+    {
+        _currHealth -= value;
+    }
+    
     private void Death()
     {
         _animator.SetBool(Die, true);
@@ -111,8 +116,8 @@ public class PlayerStatistics : MonoBehaviour
         
         _currHealth = _initialHealth;
         _currOxygen = _initialOxygen;
-        _currFood = _initialFood;
-        _currWater = _initialWater;
+        // _currFood = _initialFood;
+        // _currWater = _initialWater;
     }
     
     private void UpdateInterface()

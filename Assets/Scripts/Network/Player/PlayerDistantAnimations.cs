@@ -8,6 +8,7 @@ public class PlayerDistantAnimations : MonoBehaviour
     [SerializeField] private float _smooth;
     
     private Animator _animator;
+    private PlayerDistantHealth _health;
     
     private bool _lastJump;
     private static readonly int VelocityXParameter = Animator.StringToHash("VelocityX");
@@ -18,6 +19,7 @@ public class PlayerDistantAnimations : MonoBehaviour
     private void Awake()
     {
         _animator = GetComponent<Animator>();
+        _health = GetComponentInParent<PlayerDistantHealth>();
     }
 
     public void SetAnim(Vector2 velocity, bool jump)
@@ -50,5 +52,7 @@ public class PlayerDistantAnimations : MonoBehaviour
     {
         yield return new WaitForSeconds(5f);
         _animator.SetBool(Die, false);
+        
+        _health.InitializeHealth();
     }
 }

@@ -14,6 +14,7 @@ public class ClientMessages : MonoBehaviour
         Shoot,
         RessourceTravel,
         Death,
+        GiveDamage,
     }
     
     #region Send
@@ -71,6 +72,14 @@ public class ClientMessages : MonoBehaviour
     public void SendDeath()
     {
         Message message = Message.Create(MessageSendMode.reliable, MessagesId.Death);
+        NetworkManager.Instance.Client.Send(message);
+    }
+
+    public void SendDamage(ushort playerHit, float damage)
+    {
+        Message message = Message.Create(MessageSendMode.reliable, MessagesId.GiveDamage);
+        message.AddUShort(playerHit);
+        message.AddFloat(damage);
         NetworkManager.Instance.Client.Send(message);
     }
     #endregion
@@ -171,6 +180,22 @@ public class ClientMessages : MonoBehaviour
     private static void OnServerDeath(Message message)
     {
         ((PlayerGameIdentity)NetworkManager.Instance.Players[message.GetUShort()]).Animations.PlayDeathAnim();
+    }
+
+    [MessageHandler((ushort) ServerMessages.MessagesId.GiveDamage)]
+    private static void OnServerGiveDamage(Message message)
+    {
+        ushort playerHitId = message.GetUShort();
+        float damage = message.GetFloat();
+        
+        if (playerHitId == NetworkManager.Instance.LocalPlayer.GetId)
+        {
+            ((PlayerGameIdentity)NetworkManager.Instance.Players[playerHitId])._localHealth.TakeDamage(damage);
+        }
+        else
+        {
+            ((PlayerGameIdentity)NetworkManager.Instance.Players[playerHitId])._distantHealth.TakeDamage(damage);
+        }
     }
     #endregion
 }
