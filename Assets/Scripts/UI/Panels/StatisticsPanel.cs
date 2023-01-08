@@ -12,11 +12,9 @@ public class StatisticsPanel : Singleton<StatisticsPanel>
     [SerializeField] private Image _foodBar;
     [SerializeField] private Image _waterBar;
 
-    public void SetBarValue(float healthAmount, float oxygenAmount, float foodAmount, float waterAmount)
+    public void SetBarValue(float healthAmount, float oxygenAmount)
     {
         _healthBar.fillAmount = healthAmount;
         _oxygenBar.fillAmount = oxygenAmount;
-        // _foodBar.fillAmount = foodAmount;
-        // _waterBar.fillAmount = waterAmount;
     }
 }

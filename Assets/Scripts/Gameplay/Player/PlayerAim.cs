@@ -2,7 +2,9 @@ using System;
 using System.Collections;
 using System.Runtime.InteropServices.WindowsRuntime;
 using CMF;
+using DG.Tweening;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class PlayerAim : MonoBehaviour
 {
@@ -13,7 +15,8 @@ public class PlayerAim : MonoBehaviour
     [SerializeField] private Transform _spawnPoint;
     [SerializeField] private float _reloadTime;
     [SerializeField] private float _damage;
-    
+    [SerializeField] private float _shootDelay;
+
     private NetworkManager _networkManager;
     private ushort _playerId;
     private bool _isLocal;
@@ -25,6 +28,7 @@ public class PlayerAim : MonoBehaviour
 
     private int _bulletAmount = 6;
     private bool _isInReload;
+    private float _shootDelayClock;
     
     private void Start()
     {
@@ -47,12 +51,18 @@ public class PlayerAim : MonoBehaviour
         }
         
         if(!CanShoot || _isInReload) return;
-        
+
         OutlineRessources();
 
         if (_controller.IsSprinting || _controller.CurrentControllerState != AdvancedWalkerController.ControllerState.Grounded) return;
         
         if(_bulletAmount <= 0) return;
+
+        if (_shootDelayClock > 0)
+        {
+            _shootDelayClock -= Time.deltaTime;
+            return;
+        }
 
         if (Input.GetMouseButtonDown(0))
         {
@@ -86,6 +96,8 @@ public class PlayerAim : MonoBehaviour
             {
                 StartCoroutine(Reload());
             }
+            
+            _shootDelayClock = _shootDelay;
         }
     }
 
@@ -113,6 +125,10 @@ public class PlayerAim : MonoBehaviour
     
     public void Shoot(Vector3 targetPos, Vector3? normal)
     {
+        Camera.main.transform.DOKill();
+        Camera.main.transform.DOLocalRotate(new Vector3(-2.5f, Random.Range(0,2) == 0 ? 1 : -1, 0), 0.1f).SetEase(Ease.Linear);
+        Camera.main.transform.DOLocalRotate(new Vector3(0, 0, 0), 0.2f).SetDelay(0.1f).SetEase(Ease.Linear);
+        
         _muzzleFlashVFX.Play();
         Bullet bullet = Instantiate(_bullet, _spawnPoint.position, _spawnPoint.rotation);
         bullet.Initialize(targetPos);

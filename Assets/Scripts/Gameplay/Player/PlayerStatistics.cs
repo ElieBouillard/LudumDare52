@@ -9,17 +9,12 @@ public class PlayerStatistics : MonoBehaviour
     [Header("InitialStatistics")]
     [SerializeField] private float _initialHealth;
     [SerializeField] private float _initialOxygen;
-    [SerializeField] private float _initialFood;
-    [SerializeField] private float _initialWater;
 
     [Space(10)] [Header("DecreaseValue")] 
     [SerializeField] private float _decreaseHealth;
     [SerializeField] private float _decreaseOxygen;
-    [SerializeField] private float _decreaseFood;
-    [SerializeField] private float _decreaseWater;
 
-    [Space(10)] [Header("IncreaseValue")] 
-    [SerializeField] private float _increaseHealth;
+    [Space(10)] [Header("IncreaseValue")]
     [SerializeField] private float _increaseOxygen;
 
     [Space(10)][Header("References")]
@@ -30,8 +25,6 @@ public class PlayerStatistics : MonoBehaviour
     
     private float _currHealth;
     private float _currOxygen;
-    private float _currFood;
-    private float _currWater;
 
     private bool _isInBase;
 
@@ -53,9 +46,6 @@ public class PlayerStatistics : MonoBehaviour
         if (_isDead) return;
         
         UpdateInterface();
-        
-        // if(_currFood > 0) _currFood -= _decreaseFood * Time.deltaTime;
-        // if(_currWater > 0) _currWater -= _decreaseWater * Time.deltaTime;
 
         if (_isInBase)
         {
@@ -67,8 +57,6 @@ public class PlayerStatistics : MonoBehaviour
         }
 
         if (_currOxygen <= 0) _currHealth -= _decreaseHealth * Time.deltaTime;
-        // if (_currFood <= 0) _currHealth -= _decreaseHealth * Time.deltaTime;
-        // if (_currWater <= 0) _currHealth -= _decreaseHealth * Time.deltaTime;
 
         if (_currHealth <= 0)
         {
@@ -116,13 +104,11 @@ public class PlayerStatistics : MonoBehaviour
         
         _currHealth = _initialHealth;
         _currOxygen = _initialOxygen;
-        // _currFood = _initialFood;
-        // _currWater = _initialWater;
     }
     
     private void UpdateInterface()
     {
-        _statisticsPanel.SetBarValue(_currHealth / _initialHealth, _currOxygen / _initialOxygen, _currFood / _initialFood, _currWater/ _initialWater );
+        _statisticsPanel.SetBarValue(_currHealth / _initialHealth, _currOxygen / _initialOxygen);
     }
 
     private void OnTriggerEnter(Collider other)
