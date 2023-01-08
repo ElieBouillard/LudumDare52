@@ -36,8 +36,10 @@ public class PlayerAim : MonoBehaviour
         
         if (Input.GetMouseButtonDown(0))
         {
-            if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out RaycastHit hit, Mathf.Infinity))
+            if (Physics.Raycast(_camera.transform.position + _camera.transform.forward * 5f, _camera.transform.forward, out RaycastHit hit, Mathf.Infinity))
             {
+                Debug.DrawRay(_camera.transform.position + _camera.transform.forward * 5f, _camera.transform.forward * 5f, Color.red, 5f);
+                
                 _networkManager.ClientMessages.SendShoot(hit.point, true, hit.normal);
                 
                 Shoot(hit.point, hit.normal);
@@ -87,6 +89,6 @@ public class PlayerAim : MonoBehaviour
         impactInstance.transform.forward = normal.Value;
         impactInstance.Play();
         
-        Destroy(impactInstance, 2f);
+        Destroy(impactInstance.gameObject, 2f);
     }
 }
