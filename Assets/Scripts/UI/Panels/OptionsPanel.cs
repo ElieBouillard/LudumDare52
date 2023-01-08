@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class OptionsPanel : Panel
 {
+    [SerializeField] private bool _isInGame;
+    
     [Header("References")]
     [SerializeField] private Button _returnButton;
 
@@ -15,6 +17,6 @@ public class OptionsPanel : Panel
 
     protected void OnCLickReturn()
     {
-        PanelManager.Instance.EnablePanel(PanelType.MainMenu);
+        PanelManager.Instance.EnablePanel(_isInGame ? PanelType.Pause : PanelType.MainMenu);
     }
 }
