@@ -85,8 +85,8 @@ public class PlayerAim : MonoBehaviour
             }
             else
             {
-                _networkManager.ClientMessages.SendShoot(Camera.main.transform.position + Camera.main.transform.forward * 250f, false, Vector3.zero);
-                Shoot(Camera.main.transform.position + Camera.main.transform.forward * 250f, null);
+                _networkManager.ClientMessages.SendShoot(Camera.main.transform.position + Camera.main.transform.forward * 50f, false, Vector3.zero);
+                Shoot(Camera.main.transform.position + Camera.main.transform.forward * 50f, null);
             }
 
             Camera.main.transform.DOKill();
