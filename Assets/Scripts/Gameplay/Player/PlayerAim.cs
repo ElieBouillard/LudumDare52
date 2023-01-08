@@ -32,14 +32,12 @@ public class PlayerAim : MonoBehaviour
         
         OutlineRessources();
 
-        if (_controller.IsSprinting) return;
+        if (_controller.IsSprinting || _controller.CurrentControllerState != AdvancedWalkerController.ControllerState.Grounded) return;
         
         if (Input.GetMouseButtonDown(0))
         {
             if (Physics.Raycast(_camera.transform.position + _camera.transform.forward * 5f, _camera.transform.forward, out RaycastHit hit, Mathf.Infinity))
             {
-                Debug.DrawRay(_camera.transform.position + _camera.transform.forward * 5f, _camera.transform.forward * 5f, Color.red, 5f);
-                
                 _networkManager.ClientMessages.SendShoot(hit.point, true, hit.normal);
                 
                 Shoot(hit.point, hit.normal);
