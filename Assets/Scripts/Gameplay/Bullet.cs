@@ -20,7 +20,7 @@ public class Bullet : MonoBehaviour
     {
         transform.position += (_targetPos - transform.position).normalized * _speed * Time.deltaTime;
         
-        if ((_targetPos - transform.position).magnitude <= 0.5f)
+        if ((_targetPos - transform.position).magnitude <= 1f)
         {
             Destroy(gameObject);
         }
