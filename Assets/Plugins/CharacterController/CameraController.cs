@@ -6,7 +6,7 @@ namespace CMF
 {
 	//This script rotates a gameobject based on user input.
 	//Rotation around the x-axis (vertical) can be clamped/limited by setting 'upperVerticalLimit' and 'lowerVerticalLimit'.
-	public class CameraController : MonoBehaviour {
+	public class CameraController : Singleton<CameraController> {
 
 		//Current rotation values (in degrees);
 		float currentXAngle = 0f;
@@ -45,7 +45,10 @@ namespace CMF
 		protected CameraInput cameraInput;
 
 		//Setup references.
-		void Awake () {
+		protected override void Awake () 
+		{
+			base.Awake();
+			
 			tr = transform;
 			cam = GetComponent<Camera>();
 			cameraInput = GetComponent<CameraInput>();

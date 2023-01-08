@@ -323,9 +323,9 @@ MonoBehaviour:
   m_HandleRect: {fileID: 2833074672737916482}
   m_Direction: 0
   m_MinValue: 0
-  m_MaxValue: 1
+  m_MaxValue: 500
   m_WholeNumbers: 0
-  m_Value: 0.625
+  m_Value: 250
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -1005,6 +1005,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PanelType: 2
+  _isInGame: 0
+  _controlsDropdown: {fileID: 1205190047704512256}
+  _cameraSensiSlider: {fileID: 6655127428061245263}
+  _generalAudioSlider: {fileID: 4759728972959699995}
+  _musicAudioSlider: {fileID: 4147708369343735256}
+  _sfxAudioSlider: {fileID: 3815293543861087929}
+  _cameraSensiText: {fileID: 4047482636369203500}
   _returnButton: {fileID: 8777731876130942789}
 --- !u!1 &2314064333314712943
 GameObject:
@@ -1581,10 +1588,10 @@ MonoBehaviour:
   m_FillRect: {fileID: 8745501331875314311}
   m_HandleRect: {fileID: 5481135854665526319}
   m_Direction: 0
-  m_MinValue: 0
+  m_MinValue: 0.001
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0.625
+  m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -1672,10 +1679,10 @@ MonoBehaviour:
   m_FillRect: {fileID: 7691239794891004637}
   m_HandleRect: {fileID: 778405581151026296}
   m_Direction: 0
-  m_MinValue: 0
+  m_MinValue: 0.001
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0.625
+  m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -3001,10 +3008,10 @@ MonoBehaviour:
   m_FillRect: {fileID: 1337277799976535718}
   m_HandleRect: {fileID: 9031802698972360961}
   m_Direction: 0
-  m_MinValue: 0
+  m_MinValue: 0.001
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0.625
+  m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []

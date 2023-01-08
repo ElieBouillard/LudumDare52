@@ -365,6 +365,7 @@ GameObject:
   - component: {fileID: 356390631}
   - component: {fileID: 356390632}
   - component: {fileID: 356390633}
+  - component: {fileID: 356390634}
   m_Layer: 0
   m_Name: GAMEMANAGER
   m_TagString: Untagged
@@ -432,6 +433,20 @@ MonoBehaviour:
   _ferText: {fileID: 935493953}
   _plasticText: {fileID: 1359976150}
   _energyText: {fileID: 419091256}
+--- !u!114 &356390634
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 356390630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24164111917aa154aad47c04442a0f9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPersistant: 0
+  _audioMixer: {fileID: 24100000, guid: 6c45585480996f24b90a3582d47e0a61, type: 2}
 --- !u!114 &419091256 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7019976114244929820, guid: c2e31c126a3889e4e9ec3377f310f20d, type: 3}
