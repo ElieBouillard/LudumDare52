@@ -84,7 +84,7 @@ public class Ressource : MonoBehaviour
         
         Debug.Log($"Collected by player {player.GetId}");
 
-        if(player.TeamId == NetworkManager.Instance.LocalPlayer.TeamId)
+        if(player.GetId == NetworkManager.Instance.LocalPlayer.GetId)
             RessourceManager.Instance.AddRessource(RessourceType, _value);
         
         Destroy(gameObject);
