@@ -95,6 +95,8 @@ public class PlayerStatistics : MonoBehaviour
 
         _player.EnableInput(true);
 
+        _player.Aim.ReloadInstante();
+        
         _isDead = false;
     }   
     

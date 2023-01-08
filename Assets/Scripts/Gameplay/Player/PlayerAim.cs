@@ -38,6 +38,12 @@ public class PlayerAim : MonoBehaviour
         _controller = GetComponent<AdvancedWalkerController>();
     }
 
+    public void ReloadInstante()
+    {
+        _bulletAmount = 6;
+        BulletsPanel.Instance.UpdateBulletsAmount(_bulletAmount);
+    }
+    
     private void Update()
     {
         if (!_isLocal) return;
@@ -85,8 +91,8 @@ public class PlayerAim : MonoBehaviour
             }
             else
             {
-                _networkManager.ClientMessages.SendShoot(Camera.main.transform.position + Camera.main.transform.forward * 50f, false, Vector3.zero);
-                Shoot(Camera.main.transform.position + Camera.main.transform.forward * 50f, null);
+                _networkManager.ClientMessages.SendShoot(Camera.main.transform.position + Camera.main.transform.forward * 100f, false, Vector3.zero);
+                Shoot(Camera.main.transform.position + Camera.main.transform.forward * 100f, null);
             }
 
             Camera.main.transform.DOKill();
