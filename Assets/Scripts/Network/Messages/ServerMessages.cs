@@ -21,17 +21,21 @@ public class ServerMessages : MonoBehaviour
     #region Send
     public static void SendPlayerConnectedToLobby(ushort newPlayerId, ulong steamId)
     {
+        int teamId = NetworkManager.Instance.Players.Count % 2 == 0 ? 0 : 1;
+
         foreach (var player in NetworkManager.Instance.Players)
         {
             Message message1 = Message.Create(MessageSendMode.reliable, MessagesId.PlayerConnectedToLobby);
             message1.AddUShort(player.Value.GetId);
             message1.AddULong(player.Value.GetSteamId);
+            message1.AddInt(player.Value.TeamId);
             NetworkManager.Instance.Server.Send(message1, newPlayerId);
         }
         
         Message message2 = Message.Create(MessageSendMode.reliable, MessagesId.PlayerConnectedToLobby);
         message2.AddUShort(newPlayerId);
         message2.AddULong(steamId);
+        message2.AddInt(teamId);   
         NetworkManager.Instance.Server.SendToAll(message2);
     }
     

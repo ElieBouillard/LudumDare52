@@ -10,7 +10,9 @@ using UnityEngine.Serialization;
 
 public class GameManager : Singleton<GameManager>
 {
-    [SerializeField] private Transform[] _spawnPoints;
+    [SerializeField] private Transform[] _spawnPointsTeam0;
+    [SerializeField] private Transform[] _spawnPointsTeam1;
+    
     [SerializeField] private GameObject _localPlayerPrefab;
     [SerializeField] private GameObject _distantPlayerPrefab;
 
@@ -29,9 +31,9 @@ public class GameManager : Singleton<GameManager>
         NetworkManager.Instance.ClientMessages.SendReady();
     }
 
-    public Vector3 GetRespawnPos()
+    public Vector3 GetRespawnPos(int teamId)
     {
-        return _spawnPoints[0].position;
+        return teamId == 0 ? _spawnPointsTeam0[0].position : _spawnPointsTeam1[0].position;
     }
     
     public void SpawnPlayers()
@@ -42,36 +44,53 @@ public class GameManager : Singleton<GameManager>
 
         foreach (var player in playersTemp)
         {
-            AddPlayerInGame(player.GetId, player.GetSteamId);
+            AddPlayerInGame(player.GetId, player.GetSteamId, player.TeamId);
         }
     }
     
-    public void AddPlayerInGame(ushort playerId, ulong steamId)
+    public void AddPlayerInGame(ushort playerId, ulong steamId, int teamId)
     {
         NetworkManager networkManager = NetworkManager.Instance;
 
         GameObject playerObject = playerId == networkManager.Client.Id ? _localPlayerPrefab : _distantPlayerPrefab;
 
         Transform spawnPoint = null;
-        
-        for (int i = 0; i < networkManager.Players.Values.ToArray().Length; i++)
+
+        if (teamId == 0)
         {
-            if (networkManager.Players.Values.ToArray()[i].GetId == playerId)
+            for (int i = 0; i < networkManager.Team0.Count; i++)
             {
-                spawnPoint = _spawnPoints[i];
-                break;
+                if (networkManager.Team0.Values.ToArray()[i].GetId == playerId)
+                {
+                    spawnPoint = _spawnPointsTeam0[i];
+                    break;
+                }
+            }
+        }
+        else if (teamId == 1)
+        {
+            for (int i = 0; i < networkManager.Team1.Count; i++)
+            {
+                if (networkManager.Team1.Values.ToArray()[i].GetId == playerId)
+                {
+                    spawnPoint = _spawnPointsTeam1[i];
+                    break;
+                }
             }
         }
 
         GameObject playerTemp = Instantiate(playerObject, spawnPoint.position ,spawnPoint.rotation);
         PlayerGameIdentity playerIdentityTemp = playerTemp.GetComponent<PlayerGameIdentity>();
 
-        if(networkManager.UseSteam) playerIdentityTemp.Initialize(playerId, steamId);
-        else playerIdentityTemp.Initialize(playerId, $"Player : {playerId}");
+        if(networkManager.UseSteam) playerIdentityTemp.Initialize(playerId, steamId, teamId);
+        else playerIdentityTemp.Initialize(playerId, $"Player : {playerId}", teamId);
 
         if(playerId == networkManager.Client.Id) networkManager.SetLocalPlayer(playerIdentityTemp);
 
         networkManager.Players[playerId] = playerIdentityTemp;
+        
+        if(teamId == 0) networkManager.Team0[playerId] = playerIdentityTemp;
+        else if(teamId == 1) networkManager.Team1[playerId] = playerIdentityTemp;
     }
 
     public void RemovePlayerFromGame(ushort playerId)
