@@ -103,7 +103,7 @@ public class PlayerStatistics : MonoBehaviour
     
     private IEnumerator Respawn()
     {
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(7.5f);
 
         _animator.SetBool(Die, false);
         

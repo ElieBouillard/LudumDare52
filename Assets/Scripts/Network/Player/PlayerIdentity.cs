@@ -22,7 +22,7 @@ public class PlayerIdentity : MonoBehaviour
     #endregion
 
     public Material[] TeamMats;
-    public Renderer Renderer;
+    public Renderer[] Renderer;
     
     public virtual void Initialize(ushort id, string newName, int teamId)
     {
@@ -35,8 +35,8 @@ public class PlayerIdentity : MonoBehaviour
         TeamId = teamId;
 
         if(TeamId == -1) return;
-
-        Renderer.material = TeamMats[teamId];
+        Renderer[0].material = TeamMats[teamId];
+        Renderer[1].material = TeamMats[teamId];
     }
     
     public virtual void Initialize(ushort id, ulong steamId, int teamId)
@@ -49,6 +49,7 @@ public class PlayerIdentity : MonoBehaviour
     public void ChangeColor(int teamId)
     {
         if(teamId == -1) return;
-        Renderer.material = TeamMats[teamId];
+        Renderer[0].material = TeamMats[teamId];
+        Renderer[1].material = TeamMats[teamId];
     }
 }
