@@ -450,6 +450,7 @@ MonoBehaviour:
   - {r: 0, g: 1, b: 0.27395368, a: 1}
   - {r: 1, g: 0, b: 0, a: 1}
   _playerAudio: {fileID: 1579156218500999436}
+  _dieObject: {fileID: 4080885411548412430, guid: b29686078f500ed469ff509090c038fa, type: 3}
 --- !u!1 &6103677676966591046
 GameObject:
   m_ObjectHideFlags: 0

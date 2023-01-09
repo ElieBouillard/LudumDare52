@@ -22,8 +22,9 @@ public class PlayerStatistics : MonoBehaviour
     [SerializeField] private Animator _animator;
 
     [SerializeField] private PlayerAudio _playerAudio;
-    
-    
+
+    [SerializeField] private GameObject _dieObject;
+
     private PlayerGameIdentity _player;
     private StatisticsPanel _statisticsPanel;
     
@@ -89,8 +90,17 @@ public class PlayerStatistics : MonoBehaviour
         _playerAudio.PlayDieSound();
         
         StartCoroutine(Respawn());
+
+        StartCoroutine(PlayDieEffect());
     }
 
+    private IEnumerator PlayDieEffect()
+    {
+        yield return new WaitForSeconds(1.5f);
+        GameObject dieInstance = Instantiate(_dieObject, transform.position, transform.GetChild(0).rotation);
+        Destroy(dieInstance, 3f);
+    }
+    
     private IEnumerator Respawn()
     {
         yield return new WaitForSeconds(5f);

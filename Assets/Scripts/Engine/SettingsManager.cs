@@ -46,17 +46,24 @@ public class SettingsManager : Singleton<SettingsManager>
     {
         if(CameraController.Instance != null) CameraController.Instance.cameraSpeed = CameraSensi;
 
-        if (NetworkManager.Instance.LocalPlayer != null)
-        {
-            if(NetworkManager.Instance.LocalPlayer.TryGetComponent(out CharacterKeyboardInput input))
-                input.IsZqsd = IsZQSD;
-        }
+        StartCoroutine(LoadControls());
 
         _audioMixer.SetFloat("GeneralAudio", Mathf.Log10(GeneralAudio) * 20);
         _audioMixer.SetFloat("MusicAudio", Mathf.Log10(MusicAudio) * 20);
         _audioMixer.SetFloat("SFXAudio", Mathf.Log10(SFXAudio) * 20);
     }
 
+    public IEnumerator LoadControls()
+    {
+        yield return new WaitForSeconds(1f);
+        
+        if (NetworkManager.Instance.LocalPlayer != null)
+        {
+            if(NetworkManager.Instance.LocalPlayer.TryGetComponent(out CharacterKeyboardInput input))
+                input.IsZqsd = IsZQSD;
+        }
+    }
+    
     public void OnControlsChanged(bool isZQSD)
     {
         IsZQSD = isZQSD;
