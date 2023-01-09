@@ -134,6 +134,14 @@ public class PlayerAim : MonoBehaviour
                 _lastRessource = null;
             }
         }
+
+        if (hit.collider.TryGetComponent(out DropReceptacle dropReceptacle))
+        {
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                RessourceManager.Instance.AddRessourceToBase();
+            }
+        }
     }
     
     public void Shoot(Vector3 targetPos, Vector3? normal)

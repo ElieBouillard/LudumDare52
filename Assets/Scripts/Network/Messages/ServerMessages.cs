@@ -1,3 +1,4 @@
+using System.Linq;
 using RiptideNetworking;
 using UnityEngine;
 
@@ -16,6 +17,7 @@ public class ServerMessages : MonoBehaviour
         RessourceTravel,
         Death,
         GiveDamage,
+        DropRessources,
     }
 
     #region Send
@@ -114,6 +116,35 @@ public class ServerMessages : MonoBehaviour
         message.AddFloat(damage);
         NetworkManager.Instance.Server.SendToAll(message, playerShoot);
     }
+
+    private static void SendDropRessources(ushort playerId, int ferAmount, int plasticAmount, int energyAmount)
+    {
+        ushort playerIdToSend = new ushort();
+
+        ushort[] team0 = NetworkManager.Instance.Team0.Keys.ToArray();
+        ushort[] team1  = NetworkManager.Instance.Team1.Keys.ToArray();
+        
+        if (team0.Contains(playerId))
+        {
+            foreach (var id in NetworkManager.Instance.Team0.Keys)
+            {
+                if (id != playerId) playerIdToSend = playerIdToSend = id;
+            }
+        }
+        else if (team1.Contains(playerId))
+        {
+            foreach (var id in team1)
+            {
+                if (id != playerId) playerIdToSend = playerIdToSend = id;
+            }
+        }
+        
+        Message message = Message.Create(MessageSendMode.reliable, MessagesId.DropRessources);
+        message.AddInt(ferAmount);
+        message.AddInt(plasticAmount);
+        message.AddInt(energyAmount);
+        NetworkManager.Instance.Server.Send(message, playerIdToSend);
+    }
     #endregion
 
     #region Received
@@ -177,6 +208,12 @@ public class ServerMessages : MonoBehaviour
     private static void OnGiveDamage(ushort id, Message message)
     {
         SendGiveDamage(id, message.GetUShort(), message.GetFloat());
+    }
+
+    [MessageHandler((ushort) ClientMessages.MessagesId.DropRessources)]
+    private static void OnDropRessources(ushort id, Message message)
+    {
+        SendDropRessources(id, message.GetInt(), message.GetInt(), message.GetInt());
     }
     #endregion
 }

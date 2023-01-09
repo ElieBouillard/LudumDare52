@@ -118,6 +118,8 @@ public class Ressource : MonoBehaviour
         _isInTravelBack = false;
         IsCollected = false;
 
+        _currHealth = _initialHealth;
+        
         transform.DOMove(_startPos, 0.2f).SetEase(Ease.Linear);
         transform.DORotate(Vector3.zero, 0.2f).SetEase(Ease.Linear);
     }

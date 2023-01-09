@@ -15,6 +15,7 @@ public class ClientMessages : MonoBehaviour
         RessourceTravel,
         Death,
         GiveDamage,
+        DropRessources
     }
     
     #region Send
@@ -80,6 +81,15 @@ public class ClientMessages : MonoBehaviour
         Message message = Message.Create(MessageSendMode.reliable, MessagesId.GiveDamage);
         message.AddUShort(playerHit);
         message.AddFloat(damage);
+        NetworkManager.Instance.Client.Send(message);
+    }
+
+    public void SendOnDropRessources(int ferAmount, int plasticAmount, int energyAmount)
+    {
+        Message message = Message.Create(MessageSendMode.reliable, MessagesId.DropRessources);
+        message.AddInt(ferAmount);
+        message.AddInt(plasticAmount);
+        message.AddInt(energyAmount);
         NetworkManager.Instance.Client.Send(message);
     }
     #endregion
@@ -202,6 +212,14 @@ public class ClientMessages : MonoBehaviour
         {
             ((PlayerGameIdentity)NetworkManager.Instance.Players[playerHitId])._distantHealth.TakeDamage(damage);
         }
+    }
+
+    [MessageHandler((ushort) ServerMessages.MessagesId.DropRessources)]
+    private static void OnServerDropRessources(Message message)
+    {
+        RessourceManager.Instance.AddTeamRessource(RessourceType.Fer, message.GetInt());
+        RessourceManager.Instance.AddTeamRessource(RessourceType.Plastic, message.GetInt());
+        RessourceManager.Instance.AddTeamRessource(RessourceType.Energy, message.GetInt());
     }
     #endregion
 }

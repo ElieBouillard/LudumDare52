@@ -65,6 +65,17 @@ public class RessourceManager : Singleton<RessourceManager>
         
         ResetRessourcesInventory();
     }
+
+    public void AddRessourceToBase()
+    {
+        NetworkManager.Instance.ClientMessages.SendOnDropRessources(RessourceInventory[RessourceType.Fer],RessourceInventory[RessourceType.Plastic], RessourceInventory[RessourceType.Energy]);
+        
+        AddTeamRessource(RessourceType.Fer, RessourceInventory[RessourceType.Fer]);
+        AddTeamRessource(RessourceType.Plastic, RessourceInventory[RessourceType.Plastic]);
+        AddTeamRessource(RessourceType.Energy, RessourceInventory[RessourceType.Energy]);
+        
+        ResetRessourcesInventory();
+    }
     
     public void ResetRessourcesInventory()
     {
