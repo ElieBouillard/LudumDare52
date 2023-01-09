@@ -43,7 +43,7 @@ namespace CMF
 		public float groundFriction = 100f;
 
 		//Current momentum;
-		protected Vector3 momentum = Vector3.zero;
+		public Vector3 momentum = Vector3.zero;
 
 		//Saved velocity from last frame;
 		Vector3 savedVelocity = Vector3.zero;

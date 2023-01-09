@@ -9,10 +9,14 @@ public class RessourceManager : Singleton<RessourceManager>
     public List<Ressource> Ressources;
 
     [Header("Team")]
-    [SerializeField] private TMP_Text _ferTeamText;
-    [SerializeField] private TMP_Text _plasticTeamText;
-    [SerializeField] private TMP_Text _energyTeamText;
+    [SerializeField] private TMP_Text _ferTeam0Text;
+    [SerializeField] private TMP_Text _plasticTeam0Text;
+    [SerializeField] private TMP_Text _energyTeam0Text;
 
+    [SerializeField] private TMP_Text _ferTeam1Text;
+    [SerializeField] private TMP_Text _plasticTeam1Text;
+    [SerializeField] private TMP_Text _energyTeam1Text;
+    
     [Header("Personal")]
     [SerializeField] private TMP_Text _ferText;
     [SerializeField] private TMP_Text _plasticText;
@@ -131,8 +135,7 @@ private void Start()
         if(NetworkManager.Instance.LocalPlayer.GetId == id)
             UpdatePlayerInterface();
         
-        if(NetworkManager.Instance.LocalPlayer.TeamId == teamId)
-            UpdateTeamInterface(teamId);
+        UpdateTeamInterface(teamId);
     }
 
     public void LocalAddRessourceToBase()
@@ -178,17 +181,35 @@ private void Start()
     
     private void UpdateTeamInterface(int teamId)
     {
-        if (teamId == 0)
+        if (teamId == NetworkManager.Instance.LocalPlayer.TeamId)
         {
-            _ferTeamText.text = Team0RessourceInventory[RessourceType.Fer].ToString();
-            _plasticTeamText.text = Team0RessourceInventory[RessourceType.Plastic].ToString();
-            _energyTeamText.text = Team0RessourceInventory[RessourceType.Energy].ToString();
+            if (teamId == 0)
+            {
+                _ferTeam0Text.text = Team0RessourceInventory[RessourceType.Fer].ToString();
+                _plasticTeam0Text.text = Team0RessourceInventory[RessourceType.Plastic].ToString();
+                _energyTeam0Text.text = Team0RessourceInventory[RessourceType.Energy].ToString();
+            }
+            else if(teamId == 1)
+            {
+                _ferTeam0Text.text = Team1RessourceInventory[RessourceType.Fer].ToString();
+                _plasticTeam0Text.text = Team1RessourceInventory[RessourceType.Plastic].ToString();
+                _energyTeam0Text.text = Team1RessourceInventory[RessourceType.Energy].ToString();
+            }
         }
-        else if(teamId == 1)
+        else
         {
-            _ferTeamText.text = Team1RessourceInventory[RessourceType.Fer].ToString();
-            _plasticTeamText.text = Team1RessourceInventory[RessourceType.Plastic].ToString();
-            _energyTeamText.text = Team1RessourceInventory[RessourceType.Energy].ToString();
+            if (teamId == 0)
+            {
+                _ferTeam1Text.text = Team0RessourceInventory[RessourceType.Fer].ToString();
+                _plasticTeam1Text.text = Team0RessourceInventory[RessourceType.Plastic].ToString();
+                _energyTeam1Text.text = Team0RessourceInventory[RessourceType.Energy].ToString();
+            }
+            else if(teamId == 1)
+            {
+                _ferTeam1Text.text = Team1RessourceInventory[RessourceType.Fer].ToString();
+                _plasticTeam1Text.text = Team1RessourceInventory[RessourceType.Plastic].ToString();
+                _energyTeam1Text.text = Team1RessourceInventory[RessourceType.Energy].ToString();
+            }
         }
     }
 

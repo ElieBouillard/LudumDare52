@@ -139,9 +139,12 @@ public class PlayerAim : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.E))
             {
-                if ((dropReceptacle.transform.position - transform.position).magnitude < 5f)
+                if (dropReceptacle.TeamId == _networkManager.LocalPlayer.TeamId)
                 {
-                    RessourceManager.Instance.LocalAddRessourceToBase();
+                    if ((dropReceptacle.transform.position - transform.position).magnitude < 5f)
+                    {
+                        RessourceManager.Instance.LocalAddRessourceToBase();
+                    }
                 }
             }
         }

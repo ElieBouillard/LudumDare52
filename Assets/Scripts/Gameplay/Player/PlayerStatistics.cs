@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
+using CMF;
 using UnityEngine;
 
 public class PlayerStatistics : MonoBehaviour
@@ -69,7 +70,7 @@ public class PlayerStatistics : MonoBehaviour
         _currHealth -= value;
     }
     
-    private void Death()
+    public void Death()
     {
         _animator.SetBool(Die, true);
 
@@ -92,6 +93,8 @@ public class PlayerStatistics : MonoBehaviour
         
         SetupStatistics();
         UpdateInterface();
+        
+        GetComponent<AdvancedWalkerController>().momentum = Vector3.zero;
         
         transform.position = GameManager.Instance.GetRespawnPos(_player.TeamId);
 
