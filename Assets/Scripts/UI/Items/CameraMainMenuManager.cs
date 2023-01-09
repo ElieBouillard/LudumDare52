@@ -12,6 +12,8 @@ public class CameraMainMenuManager : Singleton<CameraMainMenuManager>
     
     public void EnableLobbyCameraPos(bool value)
     {
+        if(Camera.main == null) return;
+        
         Camera.main.transform.DOKill();
         Camera.main.transform.DOMove(value ? _camLobbyPos.position : _camMenuPos.position, _transitionTime).SetEase(Ease.Linear);
         Camera.main.transform.DORotate(value ? _camLobbyPos.eulerAngles : _camMenuPos.eulerAngles, _transitionTime).SetEase(Ease.Linear);

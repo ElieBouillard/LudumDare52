@@ -38,7 +38,7 @@ public class ServerMessages : MonoBehaviour
         {
             if (NetworkManager.Instance.Team1.Count == 2)
             {
-                teamId = 2;
+                teamId = 0;
             }
         }
         
