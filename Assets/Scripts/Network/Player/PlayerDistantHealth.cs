@@ -36,8 +36,9 @@ public class PlayerDistantHealth : MonoBehaviour
         }
     }
 
-    private void Death()
+    public void Death()
     {
         RessourceManager.Instance.Death(GetComponent<PlayerIdentity>().GetId);
+        GetComponent<PlayerGameIdentity>().Animations.PlayDeathAnim();
     }
 }

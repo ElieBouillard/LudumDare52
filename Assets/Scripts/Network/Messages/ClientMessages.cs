@@ -195,7 +195,9 @@ public class ClientMessages : MonoBehaviour
     [MessageHandler((ushort) ServerMessages.MessagesId.Death)]
     private static void OnServerDeath(Message message)
     {
-        ((PlayerGameIdentity)NetworkManager.Instance.Players[message.GetUShort()]).Animations.PlayDeathAnim();
+        ushort id = message.GetUShort();
+        
+        ((PlayerGameIdentity)NetworkManager.Instance.Players[id]).DistantHealth.Death();
     }
 
     [MessageHandler((ushort) ServerMessages.MessagesId.GiveDamage)]
@@ -206,11 +208,11 @@ public class ClientMessages : MonoBehaviour
         
         if (playerHitId == NetworkManager.Instance.LocalPlayer.GetId)
         {
-            ((PlayerGameIdentity)NetworkManager.Instance.Players[playerHitId])._localHealth.TakeDamage(damage);
+            ((PlayerGameIdentity)NetworkManager.Instance.Players[playerHitId]).LocalHealth.TakeDamage(damage);
         }
         else
         {
-            ((PlayerGameIdentity)NetworkManager.Instance.Players[playerHitId])._distantHealth.TakeDamage(damage);
+            ((PlayerGameIdentity)NetworkManager.Instance.Players[playerHitId]).DistantHealth.TakeDamage(damage);
         }
     }
 

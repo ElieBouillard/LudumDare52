@@ -14,8 +14,8 @@ public class PlayerGameIdentity : PlayerIdentity
 
     public PlayerDistantAnimations Animations { private set; get; }
     
-    public PlayerStatistics _localHealth { private set; get; }
-    public PlayerDistantHealth _distantHealth { private set; get; }
+    public PlayerStatistics LocalHealth { private set; get; }
+    public PlayerDistantHealth DistantHealth { private set; get; }
     public PlayerAim Aim { private set; get; }
 
     private CharacterKeyboardInput _input;
@@ -28,8 +28,8 @@ public class PlayerGameIdentity : PlayerIdentity
         Animations = GetComponentInChildren<PlayerDistantAnimations>();
         Aim = GetComponent<PlayerAim>();
         _input = GetComponent<CharacterKeyboardInput>();
-        _localHealth = GetComponent<PlayerStatistics>();
-        _distantHealth = GetComponent<PlayerDistantHealth>();
+        LocalHealth = GetComponent<PlayerStatistics>();
+        DistantHealth = GetComponent<PlayerDistantHealth>();
     }
 
     public override void Initialize(ushort id, string newName, int teamId)
