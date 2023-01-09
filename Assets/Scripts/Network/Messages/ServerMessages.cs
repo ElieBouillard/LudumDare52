@@ -18,6 +18,7 @@ public class ServerMessages : MonoBehaviour
         Death,
         GiveDamage,
         DropRessources,
+        SwapTeam,
     }
 
     #region Send
@@ -25,6 +26,22 @@ public class ServerMessages : MonoBehaviour
     {
         int teamId = NetworkManager.Instance.Players.Count % 2 == 0 ? 0 : 1;
 
+        if (teamId == 0)
+        {
+            if (NetworkManager.Instance.Team0.Count == 2)
+            {
+                teamId = 1;
+            }
+        }
+
+        if (teamId == 1)
+        {
+            if (NetworkManager.Instance.Team1.Count == 2)
+            {
+                teamId = 2;
+            }
+        }
+        
         foreach (var player in NetworkManager.Instance.Players)
         {
             Message message1 = Message.Create(MessageSendMode.reliable, MessagesId.PlayerConnectedToLobby);
@@ -126,6 +143,14 @@ public class ServerMessages : MonoBehaviour
         message.AddInt(energyAmount);
         NetworkManager.Instance.Server.SendToAll(message, playerId);
     }
+
+    private static void SendSwapTeam(ushort playerId, int teamId)
+    {
+        Message message = Message.Create(MessageSendMode.reliable, MessagesId.SwapTeam);
+        message.AddUShort(playerId);
+        message.AddInt(teamId);
+        NetworkManager.Instance.Server.SendToAll(message);
+    }
     #endregion
 
     #region Received
@@ -195,6 +220,12 @@ public class ServerMessages : MonoBehaviour
     private static void OnDropRessources(ushort id, Message message)
     {
         SendDropRessources(id, message.GetInt(), message.GetInt(), message.GetInt());
+    }
+
+    [MessageHandler((ushort) ClientMessages.MessagesId.SwapTeam)]
+    private static void OnSwapTeam(ushort id, Message message)
+    {
+        SendSwapTeam(id, message.GetInt());
     }
     #endregion
 }
