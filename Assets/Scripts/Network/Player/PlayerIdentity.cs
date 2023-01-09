@@ -34,6 +34,8 @@ public class PlayerIdentity : MonoBehaviour
 
         TeamId = teamId;
 
+        if(TeamId == -1) return;
+
         Renderer.material = TeamMats[teamId];
     }
     

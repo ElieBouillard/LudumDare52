@@ -185,6 +185,7 @@ public class NetworkManager : Singleton<NetworkManager>
             Server.Start(_port, MaxPlayer);
             Client.Connect($"127.0.0.1:{_port}");
         }
+        
     }
     
     public void JoinLobby()
@@ -204,6 +205,11 @@ public class NetworkManager : Singleton<NetworkManager>
     {
         if (LocalPlayer.GetId != 1) return;
 
+        if (LobbyManager.Instance.NoTeamPlayer != null) return;
+
+        if (Team0.Count == 2 && Team1.Count == 0) return;
+        if (Team0.Count == 0 && Team1.Count == 2) return;
+        
         ClientMessages.SendStartGame();
     }
 

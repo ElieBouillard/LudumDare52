@@ -15,7 +15,8 @@ public class ClientMessages : MonoBehaviour
         RessourceTravel,
         Death,
         GiveDamage,
-        DropRessources
+        DropRessources,
+        SwapTeam,
     }
     
     #region Send
@@ -92,6 +93,14 @@ public class ClientMessages : MonoBehaviour
         message.AddInt(energyAmount);
         NetworkManager.Instance.Client.Send(message);
     }
+
+    public void SendSwapTeam(int teamId)
+    {
+        Message message = Message.Create(MessageSendMode.reliable, MessagesId.SwapTeam);
+        message.AddInt(teamId);
+        NetworkManager.Instance.Client.Send(message);
+    }
+    
     #endregion
 
     #region Received
@@ -222,6 +231,12 @@ public class ClientMessages : MonoBehaviour
         ushort id = message.GetUShort();
         
         RessourceManager.Instance.AddRessourceToBase(id,message.GetInt(),message.GetInt(),message.GetInt());
+    }
+
+    [MessageHandler((ushort) ServerMessages.MessagesId.SwapTeam)]
+    private static void OnServerSwapTeam(Message message)
+    {
+        LobbyManager.Instance.ServerSwapTeam(message.GetUShort(), message.GetInt());
     }
     #endregion
 }
