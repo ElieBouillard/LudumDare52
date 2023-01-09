@@ -136,7 +136,9 @@ MonoBehaviour:
   TeamMats:
   - {fileID: 2100000, guid: 2928e3a9eff572d49b78ff23828ebecd, type: 2}
   - {fileID: 2100000, guid: 18ed4f9a42d95c14d9c54bda28ec4536, type: 2}
-  Renderer: {fileID: 5527883465000715855}
+  Renderer:
+  - {fileID: 5527883465000715855}
+  - {fileID: 7546299766503426723}
   _playerPseudoText: {fileID: 5675457187944955451}
   _profileImage: {fileID: 8199751818588200101}
   _localSprite: {fileID: 148043574162916209}
@@ -626,5 +628,10 @@ SkinnedMeshRenderer:
 --- !u!4 &6593280658549671493 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2761497308548265591, guid: 32a9841f6d070e54695c508024217613, type: 3}
+  m_PrefabInstance: {fileID: 9066527769537146930}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &7546299766503426723 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 1543346399682574993, guid: 32a9841f6d070e54695c508024217613, type: 3}
   m_PrefabInstance: {fileID: 9066527769537146930}
   m_PrefabAsset: {fileID: 0}
