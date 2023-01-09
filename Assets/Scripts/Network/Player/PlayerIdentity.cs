@@ -21,6 +21,9 @@ public class PlayerIdentity : MonoBehaviour
     public bool IsLocalPlayer => _isLocalPlayer;
     #endregion
 
+    public Material[] TeamMats;
+    public Renderer Renderer;
+    
     public virtual void Initialize(ushort id, string newName, int teamId)
     {
         _id = id;
@@ -30,6 +33,8 @@ public class PlayerIdentity : MonoBehaviour
         gameObject.name = newName;
 
         TeamId = teamId;
+
+        Renderer.material = TeamMats[teamId];
     }
     
     public virtual void Initialize(ushort id, ulong steamId, int teamId)
