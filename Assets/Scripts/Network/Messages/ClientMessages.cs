@@ -217,9 +217,9 @@ public class ClientMessages : MonoBehaviour
     [MessageHandler((ushort) ServerMessages.MessagesId.DropRessources)]
     private static void OnServerDropRessources(Message message)
     {
-        RessourceManager.Instance.AddTeamRessource(RessourceType.Fer, message.GetInt());
-        RessourceManager.Instance.AddTeamRessource(RessourceType.Plastic, message.GetInt());
-        RessourceManager.Instance.AddTeamRessource(RessourceType.Energy, message.GetInt());
+        ushort id = message.GetUShort();
+        
+        RessourceManager.Instance.AddRessourceToBase(id,message.GetInt(),message.GetInt(),message.GetInt());
     }
     #endregion
 }
