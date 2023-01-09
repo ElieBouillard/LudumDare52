@@ -16,25 +16,50 @@ namespace CMF
 		public bool useRawInput = true;
 
 		public bool IsInputLock = false;
+
+		public bool IsZqsd;
 		
         public override float GetHorizontalMovementInput()
         {
 	        if (IsInputLock) return 0f;
-			
-			if(useRawInput)
-				return Input.GetAxisRaw(horizontalInputAxis);
-			else
-				return Input.GetAxis(horizontalInputAxis);
-		}
+
+	        float horizontalValue = 0;
+	        if (IsZqsd)
+	        {
+		        if (Input.GetKey(KeyCode.Q)) horizontalValue = -1;
+		        else if (Input.GetKey(KeyCode.D)) horizontalValue = 1;
+		        else horizontalValue = 0;
+	        }
+	        else
+	        {
+		        if (Input.GetKey(KeyCode.A)) horizontalValue = -1;
+		        else if (Input.GetKey(KeyCode.D)) horizontalValue = 1;
+		        else horizontalValue = 0;
+	        }
+
+	        return horizontalValue;
+        }
 
 		public override float GetVerticalMovementInput()
 		{
 	        if (IsInputLock) return 0f;
 	        
-			if(useRawInput)
-				return Input.GetAxisRaw(verticalInputAxis);
-			else
-				return Input.GetAxis(verticalInputAxis);
+	        float verticalValue = 0;
+	        
+	        if (IsZqsd)
+	        {
+		        if (Input.GetKey(KeyCode.Z)) verticalValue = 1;
+		        else if (Input.GetKey(KeyCode.S)) verticalValue = -1;
+		        else verticalValue = 0;
+	        }
+	        else
+	        {
+		        if (Input.GetKey(KeyCode.W)) verticalValue = 1;
+		        else if (Input.GetKey(KeyCode.S)) verticalValue = -1;
+		        else verticalValue = 0;
+	        }
+
+	        return verticalValue;
 		}
 
 		public override bool IsJumpKeyPressed()

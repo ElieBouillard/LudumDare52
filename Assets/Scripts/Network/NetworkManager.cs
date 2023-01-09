@@ -109,6 +109,8 @@ public class NetworkManager : Singleton<NetworkManager>
 
         ClientMessages.SendClientConnected(UseSteam ? (ulong)SteamUser.GetSteamID() : new ulong());
 
+        CameraMainMenuManager.Instance.EnableLobbyCameraPos(true);
+        
         PanelManager.Instance.EnablePanel(PanelType.Lobby);
     }
 
@@ -117,6 +119,7 @@ public class NetworkManager : Singleton<NetworkManager>
         switch (GameState)
         {
             case GameState.Lobby:
+                CameraMainMenuManager.Instance.EnableLobbyCameraPos(false);
                 LobbyManager.Instance.ClearLobby();
                 PanelManager.Instance.EnablePanel(PanelType.MainMenu);
                 break;
@@ -207,7 +210,7 @@ public class NetworkManager : Singleton<NetworkManager>
     public void OnServerStartGame()
     {
         GameState = GameState.Gameplay;
-        SceneManager.LoadScene("LevelDesign", LoadSceneMode.Single);
+        SceneManager.LoadScene("GameplayScene", LoadSceneMode.Single);
     }
     #endregion
 

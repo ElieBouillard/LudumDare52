@@ -45,7 +45,13 @@ public class SettingsManager : Singleton<SettingsManager>
     private void Start()
     {
         if(CameraController.Instance != null) CameraController.Instance.cameraSpeed = CameraSensi;
-        
+
+        if (NetworkManager.Instance.LocalPlayer != null)
+        {
+            if(NetworkManager.Instance.LocalPlayer.TryGetComponent(out CharacterKeyboardInput input))
+                input.IsZqsd = IsZQSD;
+        }
+
         _audioMixer.SetFloat("GeneralAudio", Mathf.Log10(GeneralAudio) * 20);
         _audioMixer.SetFloat("MusicAudio", Mathf.Log10(MusicAudio) * 20);
         _audioMixer.SetFloat("SFXAudio", Mathf.Log10(SFXAudio) * 20);
@@ -55,6 +61,12 @@ public class SettingsManager : Singleton<SettingsManager>
     {
         IsZQSD = isZQSD;
         PlayerPrefs.SetInt(IsZQSDPref, isZQSD ? 1 :0 );
+        
+        if (NetworkManager.Instance.LocalPlayer != null)
+        {
+            if(NetworkManager.Instance.LocalPlayer.TryGetComponent(out CharacterKeyboardInput input))
+                input.IsZqsd = IsZQSD;
+        }
     }
 
     public void OnCameraSensiChanged(float value)
