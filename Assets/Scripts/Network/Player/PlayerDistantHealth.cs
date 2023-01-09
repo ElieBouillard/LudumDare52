@@ -9,7 +9,9 @@ public class PlayerDistantHealth : MonoBehaviour
     [SerializeField] private float _initialHealth;
     [SerializeField] private Image _healthBarImage;
     [SerializeField] private Color[] _colors;
-
+    [SerializeField] private PlayerAudio _playerAudio;
+    
+    
     private float _currHealth;
 
     private void Start()
@@ -40,5 +42,6 @@ public class PlayerDistantHealth : MonoBehaviour
     {
         RessourceManager.Instance.Death(GetComponent<PlayerIdentity>().GetId);
         GetComponent<PlayerGameIdentity>().Animations.PlayDeathAnim();
+        _playerAudio.PlayDieSound();
     }
 }

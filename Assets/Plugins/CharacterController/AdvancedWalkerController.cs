@@ -12,7 +12,7 @@ namespace CMF
 		//References to attached components;
 		protected Transform tr;
 		protected Mover mover;
-		protected CharacterInput characterInput;
+		public CharacterInput characterInput;
 		protected CeilingDetector ceilingDetector;
 
         //Jump key variables;

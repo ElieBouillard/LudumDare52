@@ -16,6 +16,7 @@ public class PlayerAim : MonoBehaviour
     [SerializeField] private float _reloadTime;
     [SerializeField] private float _damage;
     [SerializeField] private float _shootDelay;
+    [SerializeField] private PlayerAudio _playerAudio;
 
     private NetworkManager _networkManager;
     private ushort _playerId;
@@ -92,6 +93,8 @@ public class PlayerAim : MonoBehaviour
                         {
                             player.GetComponent<PlayerDistantHealth>().TakeDamage(_damage);
                             _networkManager.ClientMessages.SendDamage(player.GetId, _damage);
+                            BulletsPanel.Instance.PlayHitMarker();
+                            _playerAudio.PlayHitMarkerSound();
                         }
                     }
                 }
@@ -126,6 +129,8 @@ public class PlayerAim : MonoBehaviour
         {
             if (_lastRessource != ressource)
             {
+                if(_lastRessource != null) _lastRessource.EnableOutline(false);
+                
                 ressource.EnableOutline(true);
                 _lastRessource = ressource;
             }
@@ -160,6 +165,8 @@ public class PlayerAim : MonoBehaviour
         Bullet bullet = Instantiate(_bullet, _spawnPoint.position, _spawnPoint.rotation);
         bullet.Initialize(targetPos);
 
+        _playerAudio.PlayFireSound();
+        
         if (normal == null) return;
         ParticleSystem impactInstance = Instantiate(_impactVFX, targetPos, Quaternion.identity);
         impactInstance.transform.forward = normal.Value;
@@ -173,6 +180,8 @@ public class PlayerAim : MonoBehaviour
         _isInReload = true;
         
         BulletsPanel.Instance.StartReloadImage(_reloadTime);
+        
+        _playerAudio.PlayReloadSound();
         
         yield return new WaitForSeconds(_reloadTime);
 
