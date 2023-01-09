@@ -277,15 +277,15 @@ private void Start()
         {
             if (teamId == 0)
             {
-                _ferTeam0Text.text =$"{Team0RessourceInventory[RessourceType.Fer].ToString()}/{FerAmountToWin}";
-                _plasticTeam0Text.text = $"{Team0RessourceInventory[RessourceType.Plastic].ToString()}/{PlasticAmountToWin}";
-                _energyTeam0Text.text = $"{Team0RessourceInventory[RessourceType.Energy].ToString()}/{EnergyAmountToWin}";
+                _ferTeam1Text.text =$"{Team0RessourceInventory[RessourceType.Fer].ToString()}/{FerAmountToWin}";
+                _plasticTeam1Text.text = $"{Team0RessourceInventory[RessourceType.Plastic].ToString()}/{PlasticAmountToWin}";
+                _energyTeam1Text.text = $"{Team0RessourceInventory[RessourceType.Energy].ToString()}/{EnergyAmountToWin}";
             }
             else if(teamId == 1)
             {
-                _ferTeam0Text.text = $"{Team1RessourceInventory[RessourceType.Fer].ToString()}/{FerAmountToWin}";
-                _plasticTeam0Text.text = $"{Team1RessourceInventory[RessourceType.Plastic].ToString()}/{PlasticAmountToWin}";
-                _energyTeam0Text.text = $"{Team1RessourceInventory[RessourceType.Energy].ToString()}/{EnergyAmountToWin}";
+                _ferTeam1Text.text = $"{Team1RessourceInventory[RessourceType.Fer].ToString()}/{FerAmountToWin}";
+                _plasticTeam1Text.text = $"{Team1RessourceInventory[RessourceType.Plastic].ToString()}/{PlasticAmountToWin}";
+                _energyTeam1Text.text = $"{Team1RessourceInventory[RessourceType.Energy].ToString()}/{EnergyAmountToWin}";
             }
         }
     }
