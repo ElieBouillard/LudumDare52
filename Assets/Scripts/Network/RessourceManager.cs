@@ -8,6 +8,10 @@ public class RessourceManager : Singleton<RessourceManager>
 {
     public List<Ressource> Ressources;
 
+    public int FerAmountToWin = 2;
+    public int PlasticAmountToWin = 2;
+    public int EnergyAmountToWin = 0;
+    
     [Header("Team")]
     [SerializeField] private TMP_Text _ferTeam0Text;
     [SerializeField] private TMP_Text _plasticTeam0Text;
@@ -24,7 +28,6 @@ public class RessourceManager : Singleton<RessourceManager>
     
     public Dictionary<RessourceType, int> Team0RessourceInventory { private set; get; } = new Dictionary<RessourceType, int>();
     public Dictionary<RessourceType, int> Team1RessourceInventory { private set; get; } = new Dictionary<RessourceType, int>();
-
     public Dictionary<ushort, PlayerInventory> PlayerInventories { private set; get; } = new Dictionary<ushort, PlayerInventory>();
 
 private void Start()
@@ -46,6 +49,13 @@ private void Start()
         {
             Ressources[i].Id = (ushort)i;
         }
+        
+        _ferTeam0Text.text =$"0/{FerAmountToWin}";
+        _plasticTeam0Text.text = $"0/{PlasticAmountToWin}";
+        _energyTeam0Text.text = $"0/{EnergyAmountToWin}";
+        _ferTeam1Text.text = $"0/{FerAmountToWin}";
+        _plasticTeam1Text.text = $"0/{PlasticAmountToWin}";
+        _energyTeam1Text.text = $"0/{EnergyAmountToWin}";
     }
 
     public void AddRessourceToPlayer(ushort id, RessourceType ressourceType, int amount)
@@ -80,19 +90,20 @@ private void Start()
         PlayerInventories[id].PlasticAmount -= plasticAmount;
         PlayerInventories[id].EnergyAmount -= energyAmount;
 
-        List<Ressource> ressourcesToDelete = new List<Ressource>();
-
         for (int i = 0; i < ferAmount; i++)
         {
             foreach (var ressource in Ressources)
             {
                 if(!ressource.IsCollected) continue;
 
+                if(ressource.IsCollectedInBase) continue;
+                
                 if(ressource.RessourceType != RessourceType.Fer) continue;
 
                 if (ressource.PlayerCollector.GetId == id)
                 {
-                    ressourcesToDelete.Add(ressource);
+                    ressource.CollectedToBase();
+                    break;
                 }
             }
         }
@@ -103,11 +114,14 @@ private void Start()
             {
                 if(!ressource.IsCollected) continue;
 
+                if(ressource.IsCollectedInBase) continue;
+                
                 if(ressource.RessourceType != RessourceType.Plastic) continue;
 
                 if (ressource.PlayerCollector.GetId == id)
                 {
-                    ressourcesToDelete.Add(ressource);
+                    ressource.CollectedToBase();
+                    break;
                 }
             }
         }
@@ -118,34 +132,97 @@ private void Start()
             {
                 if(!ressource.IsCollected) continue;
 
+                if(ressource.IsCollectedInBase) continue;
+                
                 if(ressource.RessourceType != RessourceType.Energy) continue;
 
                 if (ressource.PlayerCollector.GetId == id)
                 {
-                    ressourcesToDelete.Add(ressource);
+                    ressource.CollectedToBase();
+                    break;
                 }
             }
         }
 
-        for (int i = 0; i < ressourcesToDelete.Count; i++)
-        {
-            ressourcesToDelete[i].CollectedToBase();
-        }
-        
         if(NetworkManager.Instance.LocalPlayer.GetId == id)
             UpdatePlayerInterface();
         
         UpdateTeamInterface(teamId);
+
+        CheckVictory();
+    }
+
+    private void CheckVictory()
+    {
+        if (Team0RessourceInventory[RessourceType.Fer] >= FerAmountToWin &&
+            Team0RessourceInventory[RessourceType.Plastic] >= PlasticAmountToWin &&
+            Team0RessourceInventory[RessourceType.Energy] >= EnergyAmountToWin)
+        {
+            GameManager.Instance.SetEndGame(NetworkManager.Instance.LocalPlayer.TeamId == 0);
+        }
+        
+        if (Team1RessourceInventory[RessourceType.Fer] >= FerAmountToWin &&
+            Team1RessourceInventory[RessourceType.Plastic] >= PlasticAmountToWin &&
+            Team1RessourceInventory[RessourceType.Energy] >= EnergyAmountToWin)
+        {
+            GameManager.Instance.SetEndGame(NetworkManager.Instance.LocalPlayer.TeamId == 1);
+        }
     }
 
     public void LocalAddRessourceToBase()
     {
         ushort localId = NetworkManager.Instance.LocalPlayer.GetId;
-        
-        NetworkManager.Instance.ClientMessages.SendOnDropRessources(PlayerInventories[localId].FerAmount,
-            PlayerInventories[localId].PlasticAmount, PlayerInventories[localId].EnergyAmount);
 
-        AddRessourceToBase(localId, PlayerInventories[localId].FerAmount, PlayerInventories[localId].PlasticAmount, PlayerInventories[localId].EnergyAmount);
+        Dictionary<RessourceType, int> teamInventory = NetworkManager.Instance.LocalPlayer.TeamId == 0
+            ? Team0RessourceInventory : Team1RessourceInventory;
+
+        int ferToDrop = 0;
+        int plasticToDrop = 0;
+        int energyToDrop = 0;
+        
+        if (teamInventory[RessourceType.Fer] >= FerAmountToWin)
+        {
+            ferToDrop = 0;
+        }
+        else if(PlayerInventories[localId].FerAmount + teamInventory[RessourceType.Fer] >= FerAmountToWin)
+        {
+            ferToDrop = FerAmountToWin - teamInventory[RessourceType.Fer];
+        }
+        else
+        {
+            ferToDrop = PlayerInventories[localId].FerAmount;
+        }
+
+        if (teamInventory[RessourceType.Plastic] >= PlasticAmountToWin)
+        {
+            plasticToDrop = 0;
+        }
+        else if(PlayerInventories[localId].PlasticAmount + teamInventory[RessourceType.Plastic] >= PlasticAmountToWin)
+        {
+            plasticToDrop = PlasticAmountToWin - teamInventory[RessourceType.Plastic];
+        }
+        else
+        {
+            plasticToDrop = PlayerInventories[localId].PlasticAmount;
+        }
+        
+        if (teamInventory[RessourceType.Energy] >= EnergyAmountToWin)
+        {
+            energyToDrop = 0;
+        }
+        else if(PlayerInventories[localId].EnergyAmount + teamInventory[RessourceType.Energy] >= EnergyAmountToWin)
+        {
+            energyToDrop = EnergyAmountToWin - teamInventory[RessourceType.Energy];
+        }
+        else
+        {
+            energyToDrop = PlayerInventories[localId].EnergyAmount;
+        }
+
+        NetworkManager.Instance.ClientMessages.SendOnDropRessources(ferToDrop,
+            plasticToDrop, energyToDrop);
+
+        AddRessourceToBase(localId, ferToDrop, plasticToDrop, energyToDrop);
     }
     
     public void Death(ushort playerId)
@@ -185,30 +262,30 @@ private void Start()
         {
             if (teamId == 0)
             {
-                _ferTeam0Text.text = Team0RessourceInventory[RessourceType.Fer].ToString();
-                _plasticTeam0Text.text = Team0RessourceInventory[RessourceType.Plastic].ToString();
-                _energyTeam0Text.text = Team0RessourceInventory[RessourceType.Energy].ToString();
+                _ferTeam0Text.text =$"{Team0RessourceInventory[RessourceType.Fer].ToString()}/{FerAmountToWin}";
+                _plasticTeam0Text.text = $"{Team0RessourceInventory[RessourceType.Plastic].ToString()}/{PlasticAmountToWin}";
+                _energyTeam0Text.text = $"{Team0RessourceInventory[RessourceType.Energy].ToString()}/{EnergyAmountToWin}";
             }
             else if(teamId == 1)
             {
-                _ferTeam0Text.text = Team1RessourceInventory[RessourceType.Fer].ToString();
-                _plasticTeam0Text.text = Team1RessourceInventory[RessourceType.Plastic].ToString();
-                _energyTeam0Text.text = Team1RessourceInventory[RessourceType.Energy].ToString();
+                _ferTeam0Text.text = $"{Team1RessourceInventory[RessourceType.Fer].ToString()}/{FerAmountToWin}";
+                _plasticTeam0Text.text = $"{Team1RessourceInventory[RessourceType.Plastic].ToString()}/{PlasticAmountToWin}";
+                _energyTeam0Text.text = $"{Team1RessourceInventory[RessourceType.Energy].ToString()}/{EnergyAmountToWin}";
             }
         }
         else
         {
             if (teamId == 0)
             {
-                _ferTeam1Text.text = Team0RessourceInventory[RessourceType.Fer].ToString();
-                _plasticTeam1Text.text = Team0RessourceInventory[RessourceType.Plastic].ToString();
-                _energyTeam1Text.text = Team0RessourceInventory[RessourceType.Energy].ToString();
+                _ferTeam0Text.text =$"{Team0RessourceInventory[RessourceType.Fer].ToString()}/{FerAmountToWin}";
+                _plasticTeam0Text.text = $"{Team0RessourceInventory[RessourceType.Plastic].ToString()}/{PlasticAmountToWin}";
+                _energyTeam0Text.text = $"{Team0RessourceInventory[RessourceType.Energy].ToString()}/{EnergyAmountToWin}";
             }
             else if(teamId == 1)
             {
-                _ferTeam1Text.text = Team1RessourceInventory[RessourceType.Fer].ToString();
-                _plasticTeam1Text.text = Team1RessourceInventory[RessourceType.Plastic].ToString();
-                _energyTeam1Text.text = Team1RessourceInventory[RessourceType.Energy].ToString();
+                _ferTeam0Text.text = $"{Team1RessourceInventory[RessourceType.Fer].ToString()}/{FerAmountToWin}";
+                _plasticTeam0Text.text = $"{Team1RessourceInventory[RessourceType.Plastic].ToString()}/{PlasticAmountToWin}";
+                _energyTeam0Text.text = $"{Team1RessourceInventory[RessourceType.Energy].ToString()}/{EnergyAmountToWin}";
             }
         }
     }

@@ -16,6 +16,9 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private GameObject _localPlayerPrefab;
     [SerializeField] private GameObject _distantPlayerPrefab;
 
+
+    [SerializeField] private GameObject _victoryPanel;
+    [SerializeField] private GameObject _defeatPanel;
     private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -34,6 +37,16 @@ public class GameManager : Singleton<GameManager>
     public Vector3 GetRespawnPos(int teamId)
     {
         return teamId == 0 ? _spawnPointsTeam0[0].position : _spawnPointsTeam1[0].position;
+    }
+
+    public void SetEndGame(bool _isVictory)
+    {
+        _victoryPanel.SetActive(_isVictory);
+        _defeatPanel.SetActive(!_isVictory);
+        
+        ((PlayerGameIdentity)NetworkManager.Instance.LocalPlayer).EnableInput(false);
+        
+        PanelManager.Instance.EnableCursor(true);
     }
     
     public void SpawnPlayers()
