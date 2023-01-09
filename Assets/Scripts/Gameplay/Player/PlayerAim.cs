@@ -74,21 +74,25 @@ public class PlayerAim : MonoBehaviour
         {
             if (Physics.Raycast(_camera.transform.position + _camera.transform.forward * 5f, _camera.transform.forward, out RaycastHit hit, Mathf.Infinity))
             {
-                _networkManager.ClientMessages.SendShoot(hit.point, true, hit.normal);
-                
-                Shoot(hit.point, hit.normal);
-                
-                if (hit.collider.TryGetComponent(out Ressource ressource))
+                if (Physics.Raycast(_spawnPoint.position, (hit.point - _spawnPoint.position).normalized,
+                        out RaycastHit realhit, Mathf.Infinity))
                 {
-                    ressource.TakeDamage(_playerId);
-                }
+                    _networkManager.ClientMessages.SendShoot(realhit.point, true, realhit.normal);
 
-                if (hit.collider.TryGetComponent(out PlayerGameIdentity player))
-                {
-                    if (player.TeamId != _networkManager.LocalPlayer.TeamId)
+                    Shoot(realhit.point, realhit.normal);
+                
+                    if (realhit.collider.TryGetComponent(out Ressource ressource))
                     {
-                        player.GetComponent<PlayerDistantHealth>().TakeDamage(_damage);
-                        _networkManager.ClientMessages.SendDamage(player.GetId, _damage);
+                        ressource.TakeDamage(_playerId);
+                    }
+
+                    if (hit.collider.TryGetComponent(out PlayerGameIdentity player))
+                    {
+                        if (player.TeamId != _networkManager.LocalPlayer.TeamId)
+                        {
+                            player.GetComponent<PlayerDistantHealth>().TakeDamage(_damage);
+                            _networkManager.ClientMessages.SendDamage(player.GetId, _damage);
+                        }
                     }
                 }
             }
