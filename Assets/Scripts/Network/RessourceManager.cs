@@ -21,7 +21,6 @@ public class RessourceManager : Singleton<RessourceManager>
 
     public Dictionary<RessourceType, int> RessourceInventory { private set; get; } = new Dictionary<RessourceType, int>();
 
-
     private void Start()
     {
         TeamRessourceInventory.Add(RessourceType.Fer,0);
@@ -46,15 +45,36 @@ public class RessourceManager : Singleton<RessourceManager>
     public void AddRessource(RessourceType ressourceType, int amount)
     {
         RessourceInventory[ressourceType] += amount;
-        
+
         UpdateInterface();
+    }
+
+    public void Death(ushort playerId)
+    {
+        foreach (var ressource in Ressources)
+        {
+            if (!ressource.IsCollected) continue;
+
+            if (ressource.PlayerCollector.GetId == playerId)
+            {
+                ressource.InitializeTravelToStartPos();
+            }
+        }
+        
+        if(playerId != NetworkManager.Instance.LocalPlayer.GetId) return;
+        
+        ResetRessourcesInventory();
     }
     
     public void ResetRessourcesInventory()
     {
+        RessourceInventory.Clear();
+
         RessourceInventory.Add(RessourceType.Fer,0);
         RessourceInventory.Add(RessourceType.Plastic,0);
         RessourceInventory.Add(RessourceType.Energy,0);
+        
+        UpdateInterface();
     }
     private void UpdateTeamInterface()
     {

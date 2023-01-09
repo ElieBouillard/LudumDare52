@@ -29,5 +29,15 @@ public class PlayerDistantHealth : MonoBehaviour
     {
         _currHealth -= damage;
         _healthBarImage.fillAmount = _currHealth / _initialHealth;
+
+        if (_currHealth <= 0)
+        {
+            Death();
+        }
+    }
+
+    private void Death()
+    {
+        RessourceManager.Instance.Death(GetComponent<PlayerIdentity>().GetId);
     }
 }

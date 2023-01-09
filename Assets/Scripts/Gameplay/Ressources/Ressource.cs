@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.NetworkInformation;
+using DG.Tweening;
 using UnityEngine;
 
 public class Ressource : MonoBehaviour
@@ -12,7 +14,8 @@ public class Ressource : MonoBehaviour
     
     private Collider _collider;
     private Outline _outline;
-
+    private Renderer _renderer;
+    
     public RessourceType RessourceType = RessourceType.Fer;
     
     public ushort Id;
@@ -20,8 +23,12 @@ public class Ressource : MonoBehaviour
     private int _currHealth;
 
     private bool _isInTravel;
+    private bool _isInTravelBack;
+    public bool IsCollected { private set; get; }
 
-    private Transform _targetPlayer;
+    private Vector3 _startPos;
+    
+    public PlayerIdentity PlayerCollector { private set; get; }
 
     private float _initialDistance;
     
@@ -29,26 +36,43 @@ public class Ressource : MonoBehaviour
     {
         _collider = GetComponent<Collider>();
         _outline = GetComponentInChildren<Outline>();
+        _renderer = GetComponentInChildren<Renderer>();
         
         _currHealth = _initialHealth;
         
         _outline.OutlineWidth = 0f;
+
+        _startPos = transform.position;
     }
 
     private void Update()
     {
-        if (!_isInTravel) return;
-
-        transform.position += (_targetPlayer.transform.position + Vector3.up - transform.position).normalized * _speedWhenCollected * Time.deltaTime;
-        transform.Rotate(new Vector3(180f, 180f, 0) * Time.deltaTime);
-
-        float currDistance = (_targetPlayer.transform.position + Vector3.up - transform.position).magnitude;
-        
-        transform.localScale = Vector3.one * (currDistance  / _initialDistance);
-
-        if (currDistance <= 0.5f)
+        if (_isInTravel && !IsCollected)
         {
-            Collected();
+            transform.position += (PlayerCollector.transform.position + Vector3.up - transform.position).normalized * _speedWhenCollected * Time.deltaTime;
+            transform.Rotate(new Vector3(180f, 180f, 0) * Time.deltaTime);
+
+            float currDistance = (PlayerCollector.transform.position + Vector3.up - transform.position).magnitude;
+        
+            transform.localScale = Vector3.one * (currDistance  / _initialDistance);
+
+            if (currDistance <= 0.5f)
+            {
+                Collected();
+            }
+        }
+
+        if (_isInTravelBack)
+        {
+            transform.position += (_startPos - transform.position).normalized * _speedWhenCollected * Time.deltaTime;
+            transform.Rotate(new Vector3(180f, 180f, 0) * Time.deltaTime);
+            float currDistance = (_startPos - transform.position).magnitude;
+            transform.localScale = Vector3.one * (1 - currDistance  / _initialDistance);
+            
+            if (currDistance <= 0.5f)
+            {
+                SetupToStartPos();
+            }
         }
     }
 
@@ -69,25 +93,45 @@ public class Ressource : MonoBehaviour
     {
         EnableOutline(false);
 
-        _targetPlayer = NetworkManager.Instance.Players[playerId].transform;
+        PlayerCollector = NetworkManager.Instance.Players[playerId];
 
-        _initialDistance = (_targetPlayer.transform.position - transform.position).magnitude;
+        _initialDistance = (PlayerCollector.transform.position - transform.position).magnitude;
 
         _collider.enabled = false;
         
         _isInTravel = true;
     }
+
+    public void InitializeTravelToStartPos()
+    {
+        transform.position = PlayerCollector.transform.position + Vector3.up;
+        _initialDistance = (_startPos - transform.position).magnitude;
+        _isInTravelBack = true;
+        _renderer.enabled = true;
+    }
+
+    private void SetupToStartPos()
+    {
+        PlayerCollector = null;
+        _isInTravel = false;
+        _collider.enabled = true;
+        _isInTravelBack = false;
+        IsCollected = false;
+
+        transform.DOMove(_startPos, 0.2f).SetEase(Ease.Linear);
+        transform.DORotate(Vector3.zero, 0.2f).SetEase(Ease.Linear);
+    }
     
     public void Collected()
     {
-        PlayerIdentity player = _targetPlayer.GetComponent<PlayerIdentity>();
+        PlayerIdentity player = PlayerCollector.GetComponent<PlayerIdentity>();
         
-        Debug.Log($"Collected by player {player.GetId}");
-
         if(player.GetId == NetworkManager.Instance.LocalPlayer.GetId)
             RessourceManager.Instance.AddRessource(RessourceType, _value);
-        
-        Destroy(gameObject);
+
+        _renderer.enabled = false;
+
+        IsCollected = true;
     }
 
     public void EnableOutline(bool value)

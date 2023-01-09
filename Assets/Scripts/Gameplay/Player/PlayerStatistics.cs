@@ -78,6 +78,8 @@ public class PlayerStatistics : MonoBehaviour
         _player.EnableInput(false);
         
         NetworkManager.Instance.ClientMessages.SendDeath();
+
+        RessourceManager.Instance.Death(_player.GetId);
         
         StartCoroutine(Respawn());
     }

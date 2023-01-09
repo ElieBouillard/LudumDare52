@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    [SerializeField] private float _speed = 50f;
-
     private Vector3 _targetPos;
     
     public void Initialize(Vector3 pos)
@@ -23,17 +21,5 @@ public class Bullet : MonoBehaviour
         yield return new WaitForSeconds(0.05f);
 
         transform.position = _targetPos;
-    }
-    
-    private void Update()
-    {
-        // transform.position += (_targetPos - transform.position).normalized * _speed * Time.deltaTime;
-        //
-        // if ((_targetPos - transform.position).magnitude <= 1f)
-        // {
-        //     Destroy(gameObject);
-        // }
-        
-        
     }
 }
