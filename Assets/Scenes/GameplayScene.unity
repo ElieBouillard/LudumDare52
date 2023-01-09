@@ -565,6 +565,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 405867084540811807, guid: c2e31c126a3889e4e9ec3377f310f20d, type: 3}
+      propertyPath: m_VideoClip
+      value: 
+      objectReference: {fileID: 32900000, guid: 48af666545d4e9549baa3a026a30b83a, type: 3}
+    - target: {fileID: 2045916263659396846, guid: c2e31c126a3889e4e9ec3377f310f20d, type: 3}
+      propertyPath: m_Options.m_Options.Array.data[0].m_Text
+      value: ZQSD
+      objectReference: {fileID: 0}
+    - target: {fileID: 2045916263659396846, guid: c2e31c126a3889e4e9ec3377f310f20d, type: 3}
+      propertyPath: m_Options.m_Options.Array.data[1].m_Text
+      value: WASD
+      objectReference: {fileID: 0}
     - target: {fileID: 7019976114680400488, guid: c2e31c126a3889e4e9ec3377f310f20d, type: 3}
       propertyPath: m_Name
       value: UI/CANVAS
@@ -1156,9 +1168,9 @@ MonoBehaviour:
   - {fileID: 1830542470}
   - {fileID: 1793219806}
   - {fileID: 1640217308}
-  FerAmountToWin: 2
-  PlasticAmountToWin: 4
-  EnergyAmountToWin: 1
+  FerAmountToWin: 1
+  PlasticAmountToWin: 0
+  EnergyAmountToWin: 0
   _ferTeam0Text: {fileID: 442604797}
   _plasticTeam0Text: {fileID: 442604796}
   _energyTeam0Text: {fileID: 442604795}
@@ -1191,6 +1203,8 @@ MonoBehaviour:
   _distantPlayerPrefab: {fileID: 5526070872069474696, guid: 7fc34acf9639e4c46b2be69217801c24, type: 3}
   _victoryPanel: {fileID: 264456857}
   _defeatPanel: {fileID: 264456855}
+  _clipTeam0: {fileID: 1670134210}
+  _clipTeam1: {fileID: 1670134209}
 --- !u!4 &974476160
 Transform:
   m_ObjectHideFlags: 0
@@ -1679,6 +1693,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f42e1185072dc049961573f9e0487a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1670134209 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3570751774220747579, guid: c2e31c126a3889e4e9ec3377f310f20d, type: 3}
+  m_PrefabInstance: {fileID: 442604791}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1670134210 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7258665266475716354, guid: c2e31c126a3889e4e9ec3377f310f20d, type: 3}
+  m_PrefabInstance: {fileID: 442604791}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1671702624 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4016590726976992782, guid: 8982cf7883e25c24c9304b8b5d2b5cd3, type: 3}

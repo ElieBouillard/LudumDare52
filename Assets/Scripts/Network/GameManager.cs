@@ -19,6 +19,10 @@ public class GameManager : Singleton<GameManager>
 
     [SerializeField] private GameObject _victoryPanel;
     [SerializeField] private GameObject _defeatPanel;
+
+    [SerializeField] private GameObject _clipTeam0;
+    [SerializeField] private GameObject _clipTeam1;
+    
     private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -43,6 +47,26 @@ public class GameManager : Singleton<GameManager>
     {
         _victoryPanel.SetActive(_isVictory);
         _defeatPanel.SetActive(!_isVictory);
+
+        if (_isVictory && NetworkManager.Instance.LocalPlayer.TeamId == 0)
+        {
+            _clipTeam0.SetActive(true);
+        }
+        
+        if (_isVictory && NetworkManager.Instance.LocalPlayer.TeamId == 1)
+        {
+            _clipTeam1.SetActive(true);
+        }
+        
+        if (!_isVictory && NetworkManager.Instance.LocalPlayer.TeamId == 0)
+        {
+            _clipTeam1.SetActive(true);
+        }
+        
+        if (!_isVictory && NetworkManager.Instance.LocalPlayer.TeamId == 0)
+        {
+            _clipTeam0.SetActive(true);
+        }
         
         ((PlayerGameIdentity)NetworkManager.Instance.LocalPlayer).EnableInput(false);
         
