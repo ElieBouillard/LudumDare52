@@ -121,6 +121,8 @@ public class LobbyManager : Singleton<LobbyManager>
             NoTeamPlayer = NetworkManager.Instance.Players[playerId];
             NetworkManager.Instance.Players[playerId].TeamId = -1;
         }
+
+        NetworkManager.Instance.Players[playerId].ChangeColor(teamId);
         
         ReorganizeLobbyPosition();
     }

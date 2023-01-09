@@ -45,4 +45,10 @@ public class PlayerIdentity : MonoBehaviour
         
         _steamId = steamId;
     }
+
+    public void ChangeColor(int teamId)
+    {
+        if(teamId == -1) return;
+        Renderer.material = TeamMats[teamId];
+    }
 }
