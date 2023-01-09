@@ -1,19 +1,12 @@
 fileFormatVersion: 2
-guid: 0abc6f07051eecd4ba11da67ba252e8a
+guid: 5acccd8f0ca2bae43b6c33bd3b158119
 ModelImporter:
   serializedVersion: 21300
-  internalIDToNameTable: []
-  externalObjects:
+  internalIDToNameTable:
   - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Emissive
-    second: {fileID: 2100000, guid: 0018f8482316e85448310304ef72cd4f, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Palette2
-    second: {fileID: 2100000, guid: 2928e3a9eff572d49b78ff23828ebecd, type: 2}
+      74: -203655887218126122
+    second: mixamo.com
+  externalObjects: {}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -42,7 +35,7 @@ ModelImporter:
     extraExposedTransformPaths: []
     extraUserProperties: []
     clipAnimations: []
-    isReadable: 1
+    isReadable: 0
   meshes:
     lODScreenPercentages: []
     globalScale: 1
