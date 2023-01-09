@@ -3895,8 +3895,8 @@ MonoBehaviour:
   - {fileID: 716601786}
   - {fileID: 360290052}
   - {fileID: 2111689560}
-  FerAmountToWin: 2
-  PlasticAmountToWin: 2
+  FerAmountToWin: 5
+  PlasticAmountToWin: 3
   EnergyAmountToWin: 0
   _ferTeam0Text: {fileID: 855412850}
   _plasticTeam0Text: {fileID: 855412849}
