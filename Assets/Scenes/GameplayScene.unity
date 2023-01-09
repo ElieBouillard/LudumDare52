@@ -467,6 +467,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1107091457}
     m_Modifications:
+    - target: {fileID: 4145080156640010338, guid: 974f02ce5dbd05d4f8581ae2f5e750c5, type: 3}
+      propertyPath: TeamId
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4145080156640010340, guid: 974f02ce5dbd05d4f8581ae2f5e750c5, type: 3}
       propertyPath: m_RootOrder
       value: 15
@@ -522,6 +526,10 @@ PrefabInstance:
     - target: {fileID: 4145080157044256311, guid: 974f02ce5dbd05d4f8581ae2f5e750c5, type: 3}
       propertyPath: m_Name
       value: SpawnPointsTeam1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8461028198911111979, guid: 974f02ce5dbd05d4f8581ae2f5e750c5, type: 3}
+      propertyPath: TeamId
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 974f02ce5dbd05d4f8581ae2f5e750c5, type: 3}
@@ -2088,6 +2096,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1107091457}
     m_Modifications:
+    - target: {fileID: 4145080156640010338, guid: 974f02ce5dbd05d4f8581ae2f5e750c5, type: 3}
+      propertyPath: TeamId
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4145080156640010340, guid: 974f02ce5dbd05d4f8581ae2f5e750c5, type: 3}
       propertyPath: m_RootOrder
       value: 14
@@ -2138,6 +2150,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4145080157044256308, guid: 974f02ce5dbd05d4f8581ae2f5e750c5, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8461028198911111979, guid: 974f02ce5dbd05d4f8581ae2f5e750c5, type: 3}
+      propertyPath: TeamId
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
