@@ -15,7 +15,7 @@ public class Ressource : MonoBehaviour
     
     private Collider _collider;
     private Outline _outline;
-    private Renderer _renderer;
+    private GameObject _children;
     
     public RessourceType RessourceType = RessourceType.Fer;
     
@@ -28,8 +28,9 @@ public class Ressource : MonoBehaviour
     public bool IsCollected { private set; get; }
     public bool IsCollectedInBase { private set; get; }
 
-    
-    
+    [SerializeField] private AudioSource _breakAudioSource;
+    [SerializeField] private AudioSource _collectAudioSource;
+
     private Vector3 _startPos;
     
     public PlayerIdentity PlayerCollector { private set; get; }
@@ -40,7 +41,7 @@ public class Ressource : MonoBehaviour
     {
         _collider = GetComponent<Collider>();
         _outline = GetComponentInChildren<Outline>();
-        _renderer = GetComponentInChildren<Renderer>();
+        _children = transform.GetChild(0).gameObject;
         
         _currHealth = _initialHealth;
         
@@ -97,6 +98,8 @@ public class Ressource : MonoBehaviour
     {
         EnableOutline(false);
 
+        _breakAudioSource.Play();
+        
         PlayerCollector = NetworkManager.Instance.Players[playerId];
 
         _initialDistance = (PlayerCollector.transform.position - transform.position).magnitude;
@@ -111,7 +114,7 @@ public class Ressource : MonoBehaviour
         transform.position = PlayerCollector.transform.position + Vector3.up;
         _initialDistance = (_startPos - transform.position).magnitude;
         _isInTravelBack = true;
-        _renderer.enabled = true;
+        _children.SetActive(true);
     }
 
     private void SetupToStartPos()
@@ -134,7 +137,9 @@ public class Ressource : MonoBehaviour
         
         RessourceManager.Instance.AddRessourceToPlayer(player.GetId, RessourceType, 1);
 
-        _renderer.enabled = false;
+        _collectAudioSource.Play();
+        
+        _children.SetActive(false);
 
         _isInTravel = false;
         

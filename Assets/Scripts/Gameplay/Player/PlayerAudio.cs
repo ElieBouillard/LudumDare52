@@ -12,6 +12,7 @@ public class PlayerAudio : MonoBehaviour
     [SerializeField] private AudioSource _hitSource;
     [SerializeField] private AudioSource _dieSource;
     [SerializeField] private AudioSource _reloadSource;
+    [SerializeField] private AudioSource _depositSource;
     
     [Header("MovementSound")]
     [SerializeField] private AudioSource _movementAudioSource;
@@ -42,6 +43,11 @@ public class PlayerAudio : MonoBehaviour
     public void PlayReloadSound()
     {
         _reloadSource.Play();
+    }
+
+    public void PlayDepositSound()
+    {
+        _depositSource.Play();
     }
     
     private bool _isMovementPlaying;

@@ -152,6 +152,7 @@ public class PlayerAim : MonoBehaviour
                 {
                     if ((dropReceptacle.transform.position - transform.position).magnitude < 5f)
                     {
+                        _playerAudio.PlayDepositSound();
                         RessourceManager.Instance.LocalAddRessourceToBase();
                     }
                 }
