@@ -17,7 +17,7 @@ namespace CMF
 
 		public bool IsInputLock = false;
 
-		public bool IsZqsd;
+		public bool IsZqsd = true;
 		
         public override float GetHorizontalMovementInput()
         {

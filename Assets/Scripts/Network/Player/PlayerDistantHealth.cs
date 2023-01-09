@@ -10,6 +10,7 @@ public class PlayerDistantHealth : MonoBehaviour
     [SerializeField] private Image _healthBarImage;
     [SerializeField] private Color[] _colors;
     [SerializeField] private PlayerAudio _playerAudio;
+    [SerializeField] private GameObject _dieObject;
     
     
     private float _currHealth;
@@ -43,5 +44,14 @@ public class PlayerDistantHealth : MonoBehaviour
         RessourceManager.Instance.Death(GetComponent<PlayerIdentity>().GetId);
         GetComponent<PlayerGameIdentity>().Animations.PlayDeathAnim();
         _playerAudio.PlayDieSound();
+
+        StartCoroutine(PlayDieEffect());
+    }
+    
+    private IEnumerator PlayDieEffect()
+    {
+        yield return new WaitForSeconds(1.5f);
+        GameObject dieInstance = Instantiate(_dieObject, transform.position, transform.rotation);
+        Destroy(dieInstance, 3f);
     }
 }

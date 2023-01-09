@@ -240,6 +240,7 @@ MonoBehaviour:
   _increaseOxygen: 10
   _animator: {fileID: 7172766236145833347}
   _playerAudio: {fileID: 5258176219083506152}
+  _dieObject: {fileID: 4080885411548412430, guid: b29686078f500ed469ff509090c038fa, type: 3}
 --- !u!1 &4523993326800811652
 GameObject:
   m_ObjectHideFlags: 0

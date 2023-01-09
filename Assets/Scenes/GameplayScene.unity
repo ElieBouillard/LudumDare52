@@ -655,7 +655,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8918940873378913827, guid: c2e31c126a3889e4e9ec3377f310f20d, type: 3}
       propertyPath: _cooldownTime
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c2e31c126a3889e4e9ec3377f310f20d, type: 3}
