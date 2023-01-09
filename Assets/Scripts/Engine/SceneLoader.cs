@@ -53,6 +53,12 @@ public class SceneLoader : MonoBehaviour
     {
         EditorSceneManager.OpenScene("Assets/Scenes/GameplayScene.unity", OpenSceneMode.Single);
     }
+
+    [MenuItem("SceneLoader/Load LevelDesign")]
+    private static void LoadLevelDesign()
+    {
+        EditorSceneManager.OpenScene("Assets/Scenes/LevelDesign.unity", OpenSceneMode.Single);
+    }
 #endif
 }
 

@@ -86,7 +86,7 @@ public class PlayerAim : MonoBehaviour
                         ressource.TakeDamage(_playerId);
                     }
 
-                    if (hit.collider.TryGetComponent(out PlayerGameIdentity player))
+                    if (realhit.collider.TryGetComponent(out PlayerGameIdentity player))
                     {
                         if (player.TeamId != _networkManager.LocalPlayer.TeamId)
                         {
