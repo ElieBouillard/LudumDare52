@@ -139,7 +139,10 @@ public class PlayerAim : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.E))
             {
-                RessourceManager.Instance.AddRessourceToBase();
+                if ((dropReceptacle.transform.position - transform.position).magnitude < 5f)
+                {
+                    RessourceManager.Instance.LocalAddRessourceToBase();
+                }
             }
         }
     }

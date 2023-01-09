@@ -119,31 +119,12 @@ public class ServerMessages : MonoBehaviour
 
     private static void SendDropRessources(ushort playerId, int ferAmount, int plasticAmount, int energyAmount)
     {
-        ushort playerIdToSend = new ushort();
-
-        ushort[] team0 = NetworkManager.Instance.Team0.Keys.ToArray();
-        ushort[] team1  = NetworkManager.Instance.Team1.Keys.ToArray();
-        
-        if (team0.Contains(playerId))
-        {
-            foreach (var id in NetworkManager.Instance.Team0.Keys)
-            {
-                if (id != playerId) playerIdToSend = playerIdToSend = id;
-            }
-        }
-        else if (team1.Contains(playerId))
-        {
-            foreach (var id in team1)
-            {
-                if (id != playerId) playerIdToSend = playerIdToSend = id;
-            }
-        }
-        
         Message message = Message.Create(MessageSendMode.reliable, MessagesId.DropRessources);
+        message.AddUShort(playerId);
         message.AddInt(ferAmount);
         message.AddInt(plasticAmount);
         message.AddInt(energyAmount);
-        NetworkManager.Instance.Server.Send(message, playerIdToSend);
+        NetworkManager.Instance.Server.SendToAll(message, playerId);
     }
     #endregion
 

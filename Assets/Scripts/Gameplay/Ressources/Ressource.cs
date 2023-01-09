@@ -5,6 +5,7 @@ using System.Net.NetworkInformation;
 using DG.Tweening;
 using UnityEngine;
 
+[Serializable]
 public class Ressource : MonoBehaviour
 {
     [SerializeField] private int _initialHealth = 3;
@@ -25,7 +26,10 @@ public class Ressource : MonoBehaviour
     private bool _isInTravel;
     private bool _isInTravelBack;
     public bool IsCollected { private set; get; }
+    public bool IsCollectedInBase { private set; get; }
 
+    
+    
     private Vector3 _startPos;
     
     public PlayerIdentity PlayerCollector { private set; get; }
@@ -128,14 +132,20 @@ public class Ressource : MonoBehaviour
     {
         PlayerIdentity player = PlayerCollector.GetComponent<PlayerIdentity>();
         
-        if(player.GetId == NetworkManager.Instance.LocalPlayer.GetId)
-            RessourceManager.Instance.AddRessource(RessourceType, _value);
+        RessourceManager.Instance.AddRessourceToPlayer(player.GetId, RessourceType, 1);
 
         _renderer.enabled = false;
 
+        _isInTravel = false;
+        
         IsCollected = true;
     }
 
+    public void CollectedToBase()
+    {
+        IsCollectedInBase = true;
+    }
+    
     public void EnableOutline(bool value)
     {
         if (_isInTravel) return;
