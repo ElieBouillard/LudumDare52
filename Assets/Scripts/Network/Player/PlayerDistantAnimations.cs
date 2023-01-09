@@ -10,7 +10,7 @@ public class PlayerDistantAnimations : MonoBehaviour
     private Animator _animator;
     private PlayerDistantHealth _health;
     
-    private bool _lastJump;
+    public bool LastJump;
     private static readonly int VelocityXParameter = Animator.StringToHash("VelocityX");
     private static readonly int VelocityYParameter = Animator.StringToHash("VelocityY");
     private static readonly int JumpParameter = Animator.StringToHash("Jump");
@@ -24,22 +24,22 @@ public class PlayerDistantAnimations : MonoBehaviour
 
     public void SetAnim(Vector2 velocity, bool jump)
     {
-        _targetVelocity = velocity;
+        TargetVelocity = velocity;
 
-        if (jump != _lastJump)
+        if (jump != LastJump)
         {
             _animator.SetBool(JumpParameter,jump);
-            _lastJump = jump;
+            LastJump = jump;
         }
     }
 
-    private Vector2 _targetVelocity;
+    public Vector2 TargetVelocity;
 
 
     private void Update()
     {
-        _animator.SetFloat(VelocityXParameter, Mathf.Lerp(_animator.GetFloat(VelocityXParameter), _targetVelocity.x, _smooth * Time.deltaTime)); 
-        _animator.SetFloat(VelocityYParameter, Mathf.Lerp(_animator.GetFloat(VelocityYParameter),  _targetVelocity.y,_smooth * Time.deltaTime));
+        _animator.SetFloat(VelocityXParameter, Mathf.Lerp(_animator.GetFloat(VelocityXParameter), TargetVelocity.x, _smooth * Time.deltaTime)); 
+        _animator.SetFloat(VelocityYParameter, Mathf.Lerp(_animator.GetFloat(VelocityYParameter),  TargetVelocity.y,_smooth * Time.deltaTime));
     }
 
     public void PlayDeathAnim()

@@ -20,6 +20,9 @@ public class PlayerStatistics : MonoBehaviour
 
     [Space(10)][Header("References")]
     [SerializeField] private Animator _animator;
+
+    [SerializeField] private PlayerAudio _playerAudio;
+    
     
     private PlayerGameIdentity _player;
     private StatisticsPanel _statisticsPanel;
@@ -68,6 +71,7 @@ public class PlayerStatistics : MonoBehaviour
     public void TakeDamage(float value)
     {
         _currHealth -= value;
+        _playerAudio.PlayHit();
     }
     
     public void Death()
@@ -81,6 +85,8 @@ public class PlayerStatistics : MonoBehaviour
         NetworkManager.Instance.ClientMessages.SendDeath();
 
         RessourceManager.Instance.Death(_player.GetId);
+        
+        _playerAudio.PlayDieSound();
         
         StartCoroutine(Respawn());
     }
