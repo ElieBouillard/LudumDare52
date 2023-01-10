@@ -63,7 +63,7 @@ public class GameManager : Singleton<GameManager>
             _clipTeam1.SetActive(true);
         }
         
-        if (!_isVictory && NetworkManager.Instance.LocalPlayer.TeamId == 0)
+        if (!_isVictory && NetworkManager.Instance.LocalPlayer.TeamId == 1)
         {
             _clipTeam0.SetActive(true);
         }

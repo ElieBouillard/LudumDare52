@@ -446,7 +446,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3787d3a0ea911fe4c8144d49997dc97a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _initialHealth: 80
+  _initialHealth: 60
   _healthBarImage: {fileID: 3310231207753602195}
   _colors:
   - {r: 0, g: 1, b: 0.27395368, a: 1}
