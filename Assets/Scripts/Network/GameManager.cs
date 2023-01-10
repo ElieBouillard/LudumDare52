@@ -38,9 +38,9 @@ public class GameManager : Singleton<GameManager>
         NetworkManager.Instance.ClientMessages.SendReady();
     }
 
-    public Vector3 GetRespawnPos(int teamId)
+    public Transform GetRespawnPos(int teamId)
     {
-        return teamId == 0 ? _spawnPointsTeam0[0].position : _spawnPointsTeam1[0].position;
+        return teamId == 0 ? _spawnPointsTeam0[0] : _spawnPointsTeam1[0];
     }
 
     public void SetEndGame(bool _isVictory)

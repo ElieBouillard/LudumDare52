@@ -112,7 +112,10 @@ public class PlayerStatistics : MonoBehaviour
         
         GetComponent<AdvancedWalkerController>().momentum = Vector3.zero;
         
-        transform.position = GameManager.Instance.GetRespawnPos(_player.TeamId);
+        Transform respawnPoint = GameManager.Instance.GetRespawnPos(_player.TeamId);
+
+        transform.position = respawnPoint.position;
+        transform.rotation = respawnPoint.rotation;
 
         _player.EnableInput(true);
 
